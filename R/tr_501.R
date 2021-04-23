@@ -4,6 +4,9 @@
 #' @usage tr_501()
 #' @returns A list containing:
 #' \item{darts}{character vector of all the scores of the thrown darts}
+#' \item{first_darts}{character vector of all the scores of the thrown first darts}
+#' \item{second_darts}{character vector of all the scores of the thrown second darts}
+#' \item{third_darts}{character vector of all the scores of the thrown third darts}
 #' \item{number of darts}{number of thrown darts}
 #' \item{checkout}{checkout score}
 #' \item{missed doubles}{number of missed doubles}
@@ -24,6 +27,7 @@ tr_501 <- function(){
     doubles <- c((1:20)*2, 50)
     missed_doubles <- 0
     busted <- 0
+    first_dart <- second_dart <- third_dart <- NULL
 
   # open while cycle
     while(score !=0) {
@@ -41,6 +45,16 @@ tr_501 <- function(){
       # add chr darts to thrown dart score
         thrown_darts_score <- c(thrown_darts_score, hand_scores_chr)
 
+      # add chr darts to each dart vector
+        for (i in seq_along(hand_scores_chr)){
+
+          sentence <- switch(i,
+                      "1" = "first_dart <- c(first_dart, hand_scores_chr[1])",
+                      "2" = "second_dart <- c(second_dart, hand_scores_chr[2])",
+                      "3" = "third_dart <- c(third_dart, hand_scores_chr[3])"
+                      )
+          eval(parse(text = sentence))
+        }
       # count number of darts
         n_of_darts <- n_of_darts + length(hand_scores_num)
 
@@ -50,6 +64,7 @@ tr_501 <- function(){
           if(score_i %in% doubles & (score_i - hand_scores_num[i]) !=0 ) {
             missed_doubles <- missed_doubles + 1
           }
+
           score_i <- score_i -  hand_scores_num[i]
         }
 
@@ -70,6 +85,9 @@ tr_501 <- function(){
 
     # cose importanti da return
       res <- list("darts" = thrown_darts_score,
+                  "1st dart" = first_dart,
+                  "2nd dart" = second_dart,
+                  "3rd dart" = third_dart,
                   "number of darts" = n_of_darts,
                   "checkout" = checkout,
                   "missed doubles" = missed_doubles,
