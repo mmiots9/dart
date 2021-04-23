@@ -9,9 +9,12 @@ tr_501()
 \value{
 A list containing:
 \item{darts}{character vector of all the scores of the thrown darts}
-\item{first_darts}{character vector of all the scores of the thrown first darts}
-\item{second_darts}{character vector of all the scores of the thrown second darts}
-\item{third_darts}{character vector of all the scores of the thrown third darts}
+\item{1st dart}{character vector of all the scores of the first thrown darts}
+\item{2nd dart}{character vector of all the scores of the second thrown darts}
+\item{3rd dart}{character vector of all the scores of the third thrown darts}
+\item{180}{number of 180s}
+\item{140+}{number of 140+}
+\item{100+}{number of 100+}
 \item{number of darts}{number of thrown darts}
 \item{checkout}{checkout score}
 \item{missed doubles}{number of missed doubles}
