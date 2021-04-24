@@ -11,6 +11,7 @@ day_resume_501_tr(pattern)
 }
 \value{
 A list containing:
+\item{number of legs}{number of played legs}
 \item{darts}{character vector of all the scores of the thrown darts}
 \item{1st darts}{character vector of all the scores of the first thrown darts}
 \item{2nd darts}{character vector of all the scores of the second thrown darts}
@@ -21,13 +22,15 @@ A list containing:
 \item{140+}{number of 140+}
 \item{100+}{number of 100+}
 \item{missed doubles}{number of missed doubles}
+\item{missed}{character vector of all missed doubles}
+\item{checkout rate}{checkout rate}
 \item{busted}{number of busted}
 \item{dataset count and \%}{dataset containing counts for each possible dart score}
 \item{dataset checkouts}{dataset containing counts for checkouts}
 \item{dataset mean and sd}{dataset containing mean and sd values for all 3 darts}
 }
 \description{
-This function is used to create a summary list of all the legs of the day, creating also a dash file
+This function is used to create a summary list of all the legs of the day. It creates an .RData file containing the lists corresponding to each leg created with tr_501 function and an .Rdata file containing all the daily summary. It also creates a dash file
 }
 \author{
 Matteo Miotto

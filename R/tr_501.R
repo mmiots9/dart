@@ -13,6 +13,7 @@
 #' \item{number of darts}{number of thrown darts}
 #' \item{checkout}{checkout score}
 #' \item{missed doubles}{number of missed doubles}
+#' \item{missed}{character vector of all missed doubles}
 #' \item{busted}{number of busted}
 #' @author Matteo Miotto
 #' @importFrom svDialogs dlg_form
@@ -22,7 +23,7 @@ tr_501 <- function(){
 
   # set useful vectors
     score <- 501
-    thrown_darts_score <- first_dart <- second_dart <- third_dart <- NULL
+    thrown_darts_score <- first_dart <- second_dart <- third_dart <- missed <- NULL
     from_chr_to_score_vector <- c(0:20, (1:20)*2, (1:20)*3, 25, 50)
     from_chr_to_score_names  <- c(as.character(0:20), paste("d", c(1:20), sep = ""), paste("t", c(1:20), sep = ""), "25", "d25")
     names(from_chr_to_score_vector) <- from_chr_to_score_names
@@ -66,6 +67,7 @@ tr_501 <- function(){
         for (i in seq_along(hand_scores_num)){
           if(score_i %in% doubles & (score_i - hand_scores_num[i]) !=0 ) {
             missed_doubles <- missed_doubles + 1
+            missed <- c(missed, score_i)
           }
 
           score_i <- score_i -  hand_scores_num[i]
@@ -106,6 +108,7 @@ tr_501 <- function(){
                   "140+" = `140+`,
                   "100+" = `100+`,
                   "missed doubles" = missed_doubles,
+                  "missed" = missed,
                   "busted" = busted
                   )
 

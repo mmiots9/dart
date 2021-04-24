@@ -1,9 +1,10 @@
 #' @name day_resume_501_tr
 #' @title Daily resume of legs
-#' @description This function is used to create a summary list of all the legs of the day, creating also a dash file
+#' @description This function is used to create a summary list of all the legs of the day. It creates an .RData file containing the lists corresponding to each leg created with tr_501 function and an .Rdata file containing all the daily summary. It also creates a dash file
 #' @usage day_resume_501_tr(pattern)
 #' @param pattern Character string of the pattern to search in the variable names which ones to use
 #' @returns A list containing:
+#' \item{number of legs}{number of played legs}
 #' \item{darts}{character vector of all the scores of the thrown darts}
 #' \item{1st darts}{character vector of all the scores of the first thrown darts}
 #' \item{2nd darts}{character vector of all the scores of the second thrown darts}
@@ -14,6 +15,8 @@
 #' \item{140+}{number of 140+}
 #' \item{100+}{number of 100+}
 #' \item{missed doubles}{number of missed doubles}
+#' \item{missed}{character vector of all missed doubles}
+#' \item{checkout rate}{checkout rate}
 #' \item{busted}{number of busted}
 #' \item{dataset count and \%}{dataset containing counts for each possible dart score}
 #' \item{dataset checkouts}{dataset containing counts for checkouts}
@@ -26,7 +29,7 @@
 day_resume_501_tr <- function(pattern){
 
   # set useful vectors
-    darts <- first_darts <- second_darts <-third_darts <- number_of_darts <- checkouts <- missed_doubles <- busted <- `100+` <- `140+` <- `180` <- NULL
+    darts <- first_darts <- second_darts <-third_darts <- number_of_darts <- checkouts <- missed_doubles <- missed <- busted <- `100+` <- `140+` <- `180` <- NULL
     from_chr_to_score_vector <- c(0:20, (1:20)*2, (1:20)*3, 25, 50)
     from_chr_to_score_names  <- c(as.character(0:20), paste("d", c(1:20), sep = ""), paste("t", c(1:20), sep = ""), "25", "d25")
     names(from_chr_to_score_vector) <- from_chr_to_score_names
@@ -54,6 +57,7 @@ day_resume_501_tr <- function(pattern){
         number_of_darts <- c(number_of_darts, leg_to_use$`number of darts`)
         checkouts <- c(checkouts, leg_to_use$checkout)
         missed_doubles <- c(missed_doubles, leg_to_use$`missed doubles`)
+        missed <- c(missed, leg_to_use$`missed`)
         busted <- c(busted, leg_to_use$busted)
     }
 
@@ -92,12 +96,12 @@ day_resume_501_tr <- function(pattern){
 
       colnames(t1st)[1] <- colnames(t2nd)[1] <- colnames(t3rd)[1] <- colnames(tall)[1] <- colnames(tlevels)[1] <- "score"
 
-      df_count_perc <- full_join(t1st, t2nd) %>%
+      suppressMessages(df_count_perc <- full_join(t1st, t2nd) %>%
         full_join(t3rd) %>%
         full_join(tall) %>%
         full_join(tlevels) %>%
         mutate(score = factor(score, levels = levels)) %>%
-        arrange(score)
+        arrange(score))
 
     # checkouts dataset
       df_checkouts <- as.data.frame(checkouts) %>%
@@ -121,8 +125,9 @@ day_resume_501_tr <- function(pattern){
       colnames(df_mean_sd) <- colnames(df_count_perc)[-1]
 
 
-  # return
-    res <- list("darts" = darts,
+  # create complete list
+    res <- list("number of legs" = n_of_legs,
+                "darts" = darts,
                 "1st darts" = first_darts,
                 "2nd darts" = second_darts,
                 "3rd darts" = third_darts,
@@ -132,12 +137,22 @@ day_resume_501_tr <- function(pattern){
                 "140+" = `140+`,
                 "100+" = `100+`,
                 "missed doubles" = missed_doubles,
+                "missed" = missed,
+                "checkout rate" = n_of_legs/(missed_doubles + n_of_legs)*100,
                 "busted" = busted,
                 "dataset count and %" = df_count_perc,
                 "dataset checkouts" = df_checkouts,
                 "dataset mean and sd" = df_mean_sd
     )
 
+    # saving files
+    save_leg <- paste("save(", paste(list_to_use, collapse = ", "), ", file = '", Sys.Date(),"_legs.Rdata')", sep = "")
+    eval(parse(text = save_leg))
+
+    save_summary <- paste("save(res, file = '", Sys.Date(),"_summary.Rdata')", sep = "")
+    eval(parse(text = save_summary))
+
+    # return
     return(res)
 
 }

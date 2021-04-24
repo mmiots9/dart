@@ -18,6 +18,7 @@ A list containing:
 \item{number of darts}{number of thrown darts}
 \item{checkout}{checkout score}
 \item{missed doubles}{number of missed doubles}
+\item{missed}{character vector of all missed doubles}
 \item{busted}{number of busted}
 }
 \description{

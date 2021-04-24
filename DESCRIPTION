@@ -12,5 +12,6 @@ LazyData: true
 Imports:
   svDialogs,
   stringr,
-  dplyr
+  dplyr,
+  purrr
 RoxygenNote: 7.1.1
