@@ -10,29 +10,33 @@
 #' \item{2nd darts}{character vector of all the scores of the second thrown darts}
 #' \item{3rd darts}{character vector of all the scores of the third thrown darts}
 #' \item{number of darts}{number of thrown darts}
-#' \item{checkouts}{checkouts score}
 #' \item{180}{number of 180s}
 #' \item{140+}{number of 140+}
 #' \item{100+}{number of 100+}
+#' \item{checkouts}{checkouts score}
+#' \item{closing doubles}{doubles that closed the legs}
 #' \item{missed doubles}{number of missed doubles}
 #' \item{missed}{character vector of all missed doubles}
 #' \item{checkout rate}{checkout rate}
 #' \item{busted}{number of busted}
 #' \item{dataset count and \%}{dataset containing counts for each possible dart score}
 #' \item{dataset checkouts}{dataset containing counts for checkouts}
+#' \item{dataset doubles}{dataset containing counts for missed and closing doubles}
 #' \item{dataset mean and sd}{dataset containing mean and sd values for all 3 darts}
 #' @author Matteo Miotto
-#' @importFrom stringr str_subset
+#' @importFrom stringr str_subset str_remove
 #' @importFrom dplyr arrange group_by summarise mutate full_join
+#' @importFrom purrr is_empty
 #' @export
 
 day_resume_501_tr <- function(pattern){
 
   # set useful vectors
-    darts <- first_darts <- second_darts <-third_darts <- number_of_darts <- checkouts <- missed_doubles <- missed <- busted <- `100+` <- `140+` <- `180` <- NULL
-    from_chr_to_score_vector <- c(0:20, (1:20)*2, (1:20)*3, 25, 50)
-    from_chr_to_score_names  <- c(as.character(0:20), paste("d", c(1:20), sep = ""), paste("t", c(1:20), sep = ""), "25", "d25")
+    darts <- first_darts <- second_darts <-third_darts <- number_of_darts <- checkouts <- closing_doubles <- missed_doubles <- missed <- busted <- `100+` <- `140+` <- `180` <- NULL
+    from_chr_to_score_vector <- c(0, 1:20, 1:20, (1:20)*2, (1:20)*3, 25, 50)
+    from_chr_to_score_names  <- c("0", paste("o",(1:20), sep = ""), paste("i",(1:20), sep = ""), paste("d", c(1:20), sep = ""), paste("t", c(1:20), sep = ""), "25", "d25")
     names(from_chr_to_score_vector) <- from_chr_to_score_names
+
 
   # find variables with the pattern
     list_to_use <- str_subset(ls(envir = .GlobalEnv), pattern)
@@ -56,36 +60,45 @@ day_resume_501_tr <- function(pattern){
         `180` <- c(`180`, leg_to_use$`180`)
         number_of_darts <- c(number_of_darts, leg_to_use$`number of darts`)
         checkouts <- c(checkouts, leg_to_use$checkout)
+        closing_doubles <- c(closing_doubles, leg_to_use$`closing double`)
         missed_doubles <- c(missed_doubles, leg_to_use$`missed doubles`)
         missed <- c(missed, leg_to_use$`missed`)
         busted <- c(busted, leg_to_use$busted)
     }
 
   # create useful dataset
-    levels <- c(as.character(0:20), paste("d", c(1:20), sep = ""), paste("t", c(1:20), sep = ""), "25", "d25")
+    levels <- c("0", as.character(1:20) ,paste("d", c(1:20), sep = ""), paste("t", c(1:20), sep = ""), "25", "d25")
 
     # dataset count and % all darts
-      t1st <- as.data.frame(first_darts) %>%
-        arrange(factor(x = first_darts, levels = levels, ordered = T)) %>%
-        group_by(factor(x = first_darts, levels =  levels, ordered = T)) %>%
+      t1st <- first_darts %>%
+        str_remove("[io]") %>%
+        as.data.frame() %>%
+        arrange(factor(x = ., levels = levels, ordered = T)) %>%
+        group_by(factor(x = ., levels =  levels, ordered = T)) %>%
         summarise(`1st dart` = n()) %>%
         mutate(`1st dart` = paste(`1st dart`, " (", round(`1st dart`/sum(`1st dart`), 2), "%)", sep = ""))
 
-      t2nd <- as.data.frame(second_darts) %>%
-        arrange(factor(x = second_darts, levels = levels, ordered = T)) %>%
-        group_by(factor(x = second_darts, levels =  levels, ordered = T)) %>%
+      t2nd <- second_darts %>%
+        str_remove("[io]") %>%
+        as.data.frame() %>%
+        arrange(factor(x = ., levels = levels, ordered = T)) %>%
+        group_by(factor(x = ., levels =  levels, ordered = T)) %>%
         summarise(`2nd dart` = n()) %>%
         mutate(`2nd dart` = paste(`2nd dart`, " (", round(`2nd dart`/sum(`2nd dart`), 2), "%)", sep = ""))
 
-      t3rd <- as.data.frame(third_darts) %>%
-        arrange(factor(x = third_darts, levels = levels, ordered = T)) %>%
-        group_by(factor(x = third_darts, levels =  levels, ordered = T)) %>%
+      t3rd <- third_darts %>%
+        str_remove("[io]") %>%
+        as.data.frame() %>%
+        arrange(factor(x = ., levels = levels, ordered = T)) %>%
+        group_by(factor(x = ., levels =  levels, ordered = T)) %>%
         summarise(`3rd dart` = n()) %>%
         mutate(`3rd dart` = paste(`3rd dart`, " (", round(`3rd dart`/sum(`3rd dart`), 2), "%)", sep = ""))
 
-      tall <- as.data.frame(darts) %>%
-        arrange(factor(x = darts, levels = levels, ordered = T)) %>%
-        group_by(factor(x = darts, levels =  levels, ordered = T)) %>%
+      tall <- darts %>%
+        str_remove("[io]") %>%
+        as.data.frame() %>%
+        arrange(factor(x = ., levels = levels, ordered = T)) %>%
+        group_by(factor(x = ., levels =  levels, ordered = T)) %>%
         summarise(`All darts` = n()) %>%
         mutate(`All darts` = paste(`All darts`, " (", round(`All darts`/sum(`All darts`), 2), "%)", sep = ""))
 
@@ -109,6 +122,36 @@ day_resume_501_tr <- function(pattern){
         group_by(checkouts) %>%
         summarise(`n(%)` = n()) %>%
         mutate(`n(%)` = paste(`n(%)`, " (", round(`n(%)`/sum(`n(%)`), 2), "%)", sep = ""))
+
+    # dataset missed doubles
+      tclosing <- as.data.frame(closing_doubles) %>%
+        arrange(factor(x = closing_doubles, levels = levels, ordered = T)) %>%
+        group_by(factor(x = closing_doubles, levels =  levels, ordered = T)) %>%
+        summarise(`hit` = n())
+
+      colnames(tclosing)[1] <- "score"
+
+      if(!is_empty(missed)){
+        tmissed <- as.data.frame(missed) %>%
+          arrange(missed) %>%
+          group_by(missed) %>%
+          summarise(`miss` = n())
+
+        colnames(tmissed)[1] <- "score"
+
+        suppressMessages(df_doubles <- full_join(tclosing, tmissed)  %>%
+          mutate(score = factor(score, levels = levels)) %>%
+          arrange(score))
+
+        df_doubles$hit[is.na(df_doubles$hit)] <- 0
+        df_doubles$miss[is.na(df_doubles$miss)] <- 0
+        df_doubles <- df_doubles %>%
+          mutate(`hit rate` = paste(`hit`/(`hit`+`miss`)*100, "%", sep = ""))
+
+      } else {
+        df_doubles <- tclosing %>%
+          mutate(`miss` = 0, `hit rate` = "100%")
+      }
 
     # dataset mean and sd
       first_darts_num <- as.numeric(from_chr_to_score_vector[c(first_darts)])
@@ -142,6 +185,7 @@ day_resume_501_tr <- function(pattern){
                 "busted" = busted,
                 "dataset count and %" = df_count_perc,
                 "dataset checkouts" = df_checkouts,
+                "dataset doubles" = df_doubles,
                 "dataset mean and sd" = df_mean_sd
     )
 

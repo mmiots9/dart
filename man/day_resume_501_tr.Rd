@@ -17,16 +17,18 @@ A list containing:
 \item{2nd darts}{character vector of all the scores of the second thrown darts}
 \item{3rd darts}{character vector of all the scores of the third thrown darts}
 \item{number of darts}{number of thrown darts}
-\item{checkouts}{checkouts score}
 \item{180}{number of 180s}
 \item{140+}{number of 140+}
 \item{100+}{number of 100+}
+\item{checkouts}{checkouts score}
+\item{closing doubles}{doubles that closed the legs}
 \item{missed doubles}{number of missed doubles}
 \item{missed}{character vector of all missed doubles}
 \item{checkout rate}{checkout rate}
 \item{busted}{number of busted}
 \item{dataset count and \%}{dataset containing counts for each possible dart score}
 \item{dataset checkouts}{dataset containing counts for checkouts}
+\item{dataset doubles}{dataset containing counts for missed and closing doubles}
 \item{dataset mean and sd}{dataset containing mean and sd values for all 3 darts}
 }
 \description{
