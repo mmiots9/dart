@@ -2,11 +2,8 @@
 
 export(day_resume_501_tr)
 export(tr_501)
-importFrom(dplyr,arrange)
-importFrom(dplyr,full_join)
-importFrom(dplyr,group_by)
-importFrom(dplyr,mutate)
-importFrom(dplyr,summarise)
+import(dplyr)
+importFrom(magrittr,"%>%")
 importFrom(purrr,is_empty)
 importFrom(stringr,str_detect)
 importFrom(stringr,str_remove)

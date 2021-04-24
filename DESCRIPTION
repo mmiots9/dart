@@ -13,5 +13,6 @@ Imports:
   svDialogs,
   stringr,
   dplyr,
-  purrr
+  purrr,
+  magrittr
 RoxygenNote: 7.1.1

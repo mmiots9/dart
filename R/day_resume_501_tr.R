@@ -25,8 +25,9 @@
 #' \item{dataset mean and sd}{dataset containing mean and sd values for all 3 darts}
 #' @author Matteo Miotto
 #' @importFrom stringr str_subset str_remove
-#' @importFrom dplyr arrange group_by summarise mutate full_join
+#' @import dplyr
 #' @importFrom purrr is_empty
+#' @importFrom magrittr %>%
 #' @export
 
 day_resume_501_tr <- function(pattern){
@@ -169,24 +170,24 @@ day_resume_501_tr <- function(pattern){
 
 
   # create complete list
-    res <- list("number of legs" = n_of_legs,
+    res <- list("number_of_legs" = n_of_legs,
                 "darts" = darts,
-                "1st darts" = first_darts,
-                "2nd darts" = second_darts,
-                "3rd darts" = third_darts,
-                "number of darts" = number_of_darts,
+                "1st_darts" = first_darts,
+                "2nd_darts" = second_darts,
+                "3rd_darts" = third_darts,
+                "number_of_darts" = number_of_darts,
                 "checkouts" = checkouts,
-                "180" = `180`,
-                "140+" = `140+`,
-                "100+" = `100+`,
-                "missed doubles" = missed_doubles,
+                "n180" = `180`,
+                "n140+" = `140+`,
+                "n100+" = `100+`,
+                "missed_doubles" = missed_doubles,
                 "missed" = missed,
-                "checkout rate" = n_of_legs/(missed_doubles + n_of_legs)*100,
+                "checkout_rate" = n_of_legs/(missed_doubles + n_of_legs)*100,
                 "busted" = busted,
-                "dataset count and %" = df_count_perc,
-                "dataset checkouts" = df_checkouts,
-                "dataset doubles" = df_doubles,
-                "dataset mean and sd" = df_mean_sd
+                "dataset_count_%" = df_count_perc,
+                "dataset_checkouts" = df_checkouts,
+                "dataset_doubles" = df_doubles,
+                "dataset_mean_sd" = df_mean_sd
     )
 
     # saving files
