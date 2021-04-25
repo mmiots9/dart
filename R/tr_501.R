@@ -52,22 +52,6 @@ tr_501 <- function(){
         hand_scores_chr <- as.character( trimws( unlist( strsplit(hand_score, split = ",")), which = "both"))
         hand_scores_num <- as.numeric(from_chr_to_score_vector[c(hand_scores_chr)])
 
-      # add chr darts to thrown dart score
-        thrown_darts_score <- c(thrown_darts_score, hand_scores_chr)
-
-      # add chr darts to each dart vector
-        for (i in seq_along(hand_scores_chr)){
-
-          sentence <- switch(i,
-                      "1" = "first_dart <- c(first_dart, hand_scores_chr[1])",
-                      "2" = "second_dart <- c(second_dart, hand_scores_chr[2])",
-                      "3" = "third_dart <- c(third_dart, hand_scores_chr[3])"
-                      )
-          eval(parse(text = sentence))
-        }
-      # count number of darts
-        n_of_darts <- n_of_darts + length(hand_scores_num)
-
       # subtract darts score from score and evaluating if miss double for checkout or bust
         score_i <- score
         for (i in seq_along(hand_scores_num)){
@@ -92,8 +76,26 @@ tr_501 <- function(){
 
         } else {
           busted <- busted + 1
+          hand_scores_chr <- c("0", "0", "0")
+
         }
 
+        # add chr darts to each dart vector
+        for (i in seq_along(hand_scores_chr)){
+
+          sentence <- switch(i,
+                             "1" = "first_dart <- c(first_dart, hand_scores_chr[1])",
+                             "2" = "second_dart <- c(second_dart, hand_scores_chr[2])",
+                             "3" = "third_dart <- c(third_dart, hand_scores_chr[3])"
+          )
+          eval(parse(text = sentence))
+        }
+
+        # add chr darts to thrown dart score
+        thrown_darts_score <- c(thrown_darts_score, hand_scores_chr)
+
+        # count number of darts
+        n_of_darts <- n_of_darts + length(hand_scores_chr)
 
 
       # checkout
