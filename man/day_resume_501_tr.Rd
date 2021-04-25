@@ -26,10 +26,11 @@ A list containing:
 \item{missed}{character vector of all missed doubles}
 \item{checkout rate}{checkout rate}
 \item{busted}{number of busted}
-\item{dataset count and \%}{dataset containing counts for each possible dart score}
-\item{dataset checkouts}{dataset containing counts for checkouts}
-\item{dataset doubles}{dataset containing counts for missed and closing doubles}
-\item{dataset mean and sd}{dataset containing mean and sd values for all 3 darts}
+\item{dataset_count_perc}{dataset containing counts for each possible dart score}
+\item{dataset_checkouts}{dataset containing counts for checkouts}
+\item{dataset_doubles}{dataset containing counts for missed and closing doubles}
+\item{dataset_mean_sd}{dataset containing mean and sd values for all 3 darts}
+\item{dataset_power}{dataset containing power scoring counts}
 }
 \description{
 This function is used to create a summary list of all the legs of the day. It creates an .RData file containing the lists corresponding to each leg created with tr_501 function and an .Rdata file containing all the daily summary. It also creates a dash file

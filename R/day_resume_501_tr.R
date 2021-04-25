@@ -19,10 +19,11 @@
 #' \item{missed}{character vector of all missed doubles}
 #' \item{checkout rate}{checkout rate}
 #' \item{busted}{number of busted}
-#' \item{dataset count and \%}{dataset containing counts for each possible dart score}
-#' \item{dataset checkouts}{dataset containing counts for checkouts}
-#' \item{dataset doubles}{dataset containing counts for missed and closing doubles}
-#' \item{dataset mean and sd}{dataset containing mean and sd values for all 3 darts}
+#' \item{dataset_count_perc}{dataset containing counts for each possible dart score}
+#' \item{dataset_checkouts}{dataset containing counts for checkouts}
+#' \item{dataset_doubles}{dataset containing counts for missed and closing doubles}
+#' \item{dataset_mean_sd}{dataset containing mean and sd values for all 3 darts}
+#' \item{dataset_power}{dataset containing power scoring counts}
 #' @author Matteo Miotto
 #' @importFrom stringr str_subset str_remove
 #' @import dplyr
@@ -79,6 +80,7 @@ day_resume_501_tr <- function(pattern){
         summarise(`1st dart` = n()) %>%
         mutate(`1st dart` = paste(`1st dart`, " (", round(`1st dart`/sum(`1st dart`), 2), "%)", sep = ""))
 
+
       t2nd <- second_darts %>%
         str_remove("[io]") %>%
         as.data.frame() %>%
@@ -86,6 +88,7 @@ day_resume_501_tr <- function(pattern){
         group_by(factor(x = ., levels =  levels, ordered = T)) %>%
         summarise(`2nd dart` = n()) %>%
         mutate(`2nd dart` = paste(`2nd dart`, " (", round(`2nd dart`/sum(`2nd dart`), 2), "%)", sep = ""))
+
 
       t3rd <- third_darts %>%
         str_remove("[io]") %>%
@@ -95,6 +98,7 @@ day_resume_501_tr <- function(pattern){
         summarise(`3rd dart` = n()) %>%
         mutate(`3rd dart` = paste(`3rd dart`, " (", round(`3rd dart`/sum(`3rd dart`), 2), "%)", sep = ""))
 
+
       tall <- darts %>%
         str_remove("[io]") %>%
         as.data.frame() %>%
@@ -103,19 +107,22 @@ day_resume_501_tr <- function(pattern){
         summarise(`All darts` = n()) %>%
         mutate(`All darts` = paste(`All darts`, " (", round(`All darts`/sum(`All darts`), 2), "%)", sep = ""))
 
-      tlevels <- as.data.frame(levels) %>%
-        arrange(factor(x = levels, levels = levels, ordered = T)) %>%
-        group_by(factor(x = levels,levels =  levels, ordered = T))
-      tlevels <- tlevels[1]
+      # tlevels <- as.data.frame(levels) %>%
+      #   arrange(factor(x = levels, levels = levels, ordered = T)) %>%
+      #   group_by(factor(x = levels,levels =  levels, ordered = T))
+      # tlevels <- tlevels[1]
 
-      colnames(t1st)[1] <- colnames(t2nd)[1] <- colnames(t3rd)[1] <- colnames(tall)[1] <- colnames(tlevels)[1] <- "score"
+      colnames(t1st)[1] <- colnames(t2nd)[1] <- colnames(t3rd)[1] <- colnames(tall)[1] <- "score"
+      # colnames(tlevels)[1]
 
       suppressMessages(df_count_perc <- full_join(t1st, t2nd) %>%
         full_join(t3rd) %>%
         full_join(tall) %>%
-        full_join(tlevels) %>%
+        # full_join(tlevels) %>%
         mutate(score = factor(score, levels = levels)) %>%
         arrange(score))
+
+      df_count_perc$`1st dart`[is.na(df_count_perc$`1st dart`)] <- df_count_perc$`2nd dart`[is.na(df_count_perc$`2nd dart`)] <- df_count_perc$`3rd dart`[is.na(df_count_perc$`3rd dart`)] <-"0 (0%)"
 
     # checkouts dataset
       df_checkouts <- as.data.frame(checkouts) %>%
@@ -168,6 +175,10 @@ day_resume_501_tr <- function(pattern){
       df_mean_sd <- data.frame(first_darts_meands, second_darts_meands, third_darts_meands, darts_meands)
       colnames(df_mean_sd) <- colnames(df_count_perc)[-1]
 
+    # dataset power scoring
+      df_power <- data.frame("100+" = sum(`100+`), "140+" = sum(`140+`), "180" = sum(`180`))
+      colnames(df_power) <- c("100+", "140+", "180")
+
 
   # create complete list
     res <- list("number_of_legs" = n_of_legs,
@@ -178,16 +189,17 @@ day_resume_501_tr <- function(pattern){
                 "number_of_darts" = number_of_darts,
                 "checkouts" = checkouts,
                 "n180" = `180`,
-                "n140+" = `140+`,
-                "n100+" = `100+`,
+                "n140plus" = `140+`,
+                "n100plus" = `100+`,
                 "missed_doubles" = missed_doubles,
                 "missed" = missed,
                 "checkout_rate" = n_of_legs/(missed_doubles + n_of_legs)*100,
                 "busted" = busted,
-                "dataset_count_%" = df_count_perc,
+                "dataset_count_perc" = df_count_perc,
                 "dataset_checkouts" = df_checkouts,
                 "dataset_doubles" = df_doubles,
-                "dataset_mean_sd" = df_mean_sd
+                "dataset_mean_sd" = df_mean_sd,
+                "dataset_power" = df_power
     )
 
     # saving files

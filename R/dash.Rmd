@@ -1,0 +1,133 @@
+---
+title: "`r params$set_title`"
+params:
+  filename : "~/Desktop/darts/2021-04-25_summary.Rdata"
+  set_title: "summary"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(ggforce)
+
+load(params$filename)
+rm(params)
+
+```
+
+``` {r set2, include=FALSE} 
+eval(parse(text = paste( "res <- ", ls()))) 
+fun_dove <- function(scores){
+  x <- y <- NULL
+  for (i in seq_along(scores)){
+    xi <- runif(1, min = dove$xmin[dove$punti == scores[i]], max = dove$xmax[dove$punti == scores[i]])
+    yi <- runif(1, min = dove$ymin[dove$punti == scores[i]], max = dove$ymax[dove$punti == scores[i]])
+    x <- c(x, xi)
+    y <- c(y, yi)
+  }
+  return(data.frame(scores = scores, x = x, y = y))
+}
+```
+
+Resume 
+========================================================================
+
+Column 
+-----------------------------------------------------------------------
+### Commentary
+
+Oggi hai giocato `r res$number_of_legs` legs, usando `r sum(res$number_of_darts)` darts. 
+
+Column 
+-----------------------------------------------------------------------
+### Board {.no-padding}
+
+```{r}
+df <- data.frame(score = as.character(c(1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5, 20)),
+                 xmin = 0:19,
+                 xmax = 1:20,
+                 ytext = rep(190, 20),
+                 xtext = seq(0.5, 19.5, by = 1),
+                 angle = c( seq(-18, -90, length.out = 5), seq(72, 0, length.out = 5), seq(-18, -72, length.out = 4), 90, seq(72, 0, length.out = 5))
+           )
+dove <- data.frame(
+  punti = c("0", paste("d", c(1:20), sep = ""), paste("o",(1:20), sep = ""), paste("t", c(1:20), sep = ""), paste("i",(1:20), sep = ""),  "25", "d25"),
+  xmin = c(0, rep(c(0, 7, 9, 2, 18, 4, 11, 13, 16, 5, 14, 17, 3, 15, 6, 12, 8, 1, 10, 19), 4), rep(0, 2)),
+  xmax = c(20, rep(c(1, 8, 10, 3, 19, 5, 12, 14, 17, 6, 15, 18, 4, 16, 7, 13, 9, 2, 11, 20), 4), rep(20, 2)),
+  ymin = c(170, rep(162, 20), rep(107, 20), rep(99, 20), rep(16, 20), 12.7/2, 0),
+  ymax = c(205, rep(170, 20), rep(162, 20), rep(107, 20), rep(99, 20), 16, 12.7/2)
+)
+
+dfdove <- fun_dove(res$darts)
+
+
+ggplot(df) +
+  geom_rect(aes(xmin = 0, xmax = 20, ymin = 170, ymax = 205), fill = "black") +
+  geom_rect(aes(xmin = xmin, xmax = xmax, ymin = 162, ymax = 170), fill = rep(c("#01a33a", "#fe100f"), 10), color = "grey") +
+  geom_rect(aes(xmin = xmin, xmax = xmax, ymin = 107, ymax = 162), fill = rep(c("#f5debb", "black"), 10), color = "grey") +
+  geom_rect(aes(xmin = xmin, xmax = xmax, ymin = 99, ymax = 107), fill = rep(c("#fe100f", "#01a33a"), 10), color = "grey") +
+  geom_rect(aes(xmin = xmin, xmax = xmax, ymin = 16, ymax = 99), fill = rep(c("black", "#f5debb"), 10), color = "grey") +
+  geom_text(aes(x = xtext, y = ytext, label= score, angle = angle), color = "white", size = 7) +
+  coord_polar(start = 0.157) +
+  geom_point(aes(x = 0, y = 0), shape = 21, size = 10, color = "grey", fill = "#01a33a") +
+  geom_point(aes(x = 0, y = 0), shape = 21, size = 4, color = "grey", fill = "#fe100f") +
+  geom_point(data = dfdove, aes(x = x, y = y), color = "blue", size = 1, shape = 4) +
+  theme_void()
+
+
+
+```
+
+Statistics
+========================================================================
+
+Column {.tabset}
+-----------------------------------------------------------------------
+### Darts count 
+
+``` {r}
+library(kableExtra)
+kable(res$dataset_count_perc) %>%
+  kable_styling()
+```
+
+### Scores
+<br>
+**Darts mean** 
+
+``` {r}
+library(kableExtra)
+kable(res$dataset_mean_sd) %>%
+  kable_styling()
+```
+
+**Power scoring**
+``` {r}
+library(kableExtra)
+kable(res$dataset_power) %>%
+  kable_styling()
+```
+
+Column {.tabset}
+-----------------------------------------------------------------------
+### Checkouts
+
+``` {r}
+library(kableExtra)
+kable(res$dataset_checkouts) %>%
+  kable_styling()
+```
+
+### Doubles
+
+``` {r}
+library(kableExtra)
+kable(res$dataset_doubles) %>%
+  kable_styling()
+```
+
