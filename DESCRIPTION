@@ -14,5 +14,8 @@ Imports:
   stringr,
   dplyr,
   purrr,
-  magrittr
+  magrittr,
+  ggplot2,
+  kableExtra,
+  ggforce
 RoxygenNote: 7.1.1

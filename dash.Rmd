@@ -1,8 +1,9 @@
 ---
 title: "`r params$set_title`"
 params:
-  filename : "~/Desktop/darts/2021-04-25_summary.Rdata"
+  filename : "/Users/matteo/Desktop/darts/2021-04-25_summary.Rdata"
   set_title: "summary"
+  wd: "~/desktop"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
@@ -11,17 +12,19 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-library(flexdashboard)
-library(tidyverse)
-library(ggforce)
-
-load(params$filename)
-rm(params)
-
+knitr::opts_knit$set(root.dir = params$wd)
 ```
 
 ``` {r set2, include=FALSE} 
-eval(parse(text = paste( "res <- ", ls()))) 
+library(flexdashboard)
+library(ggplot2)
+library(kableExtra)
+library(ggforce)
+load(params$filename)
+
+```
+
+``` {r set3, include=FALSE} 
 fun_dove <- function(scores){
   x <- y <- NULL
   for (i in seq_along(scores)){
@@ -34,14 +37,22 @@ fun_dove <- function(scores){
 }
 ```
 
-Resume 
-========================================================================
+# Resume 
 
 Column 
 -----------------------------------------------------------------------
 ### Commentary
+<br>
+Oggi hai giocato `r res$number_of_legs` legs, usando `r sum(res$number_of_darts)` freccette. 
+<br>
 
-Oggi hai giocato `r res$number_of_legs` legs, usando `r sum(res$number_of_darts)` darts. 
+
+La chiusura più alta è stata `r max(res$checkouts)`, eseguita nel leg `r which(res$checkouts == max(res$checkouts))`.
+<br>
+
+
+
+
 
 Column 
 -----------------------------------------------------------------------
@@ -57,10 +68,10 @@ df <- data.frame(score = as.character(c(1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7
            )
 dove <- data.frame(
   punti = c("0", paste("d", c(1:20), sep = ""), paste("o",(1:20), sep = ""), paste("t", c(1:20), sep = ""), paste("i",(1:20), sep = ""),  "25", "d25"),
-  xmin = c(0, rep(c(0, 7, 9, 2, 18, 4, 11, 13, 16, 5, 14, 17, 3, 15, 6, 12, 8, 1, 10, 19), 4), rep(0, 2)),
-  xmax = c(20, rep(c(1, 8, 10, 3, 19, 5, 12, 14, 17, 6, 15, 18, 4, 16, 7, 13, 9, 2, 11, 20), 4), rep(20, 2)),
-  ymin = c(170, rep(162, 20), rep(107, 20), rep(99, 20), rep(16, 20), 12.7/2, 0),
-  ymax = c(205, rep(170, 20), rep(162, 20), rep(107, 20), rep(99, 20), 16, 12.7/2)
+  xmin = c(0, rep(c(0, 7, 9, 2, 18, 4, 11, 13, 16, 5, 14, 17, 3, 15, 6, 12, 8, 1, 10, 19), 4), rep(0, 2)) + 0.1,
+  xmax = c(20, rep(c(1, 8, 10, 3, 19, 5, 12, 14, 17, 6, 15, 18, 4, 16, 7, 13, 9, 2, 11, 20), 4), rep(20, 2)) - 0.1,
+  ymin = c(171, rep(162, 20), rep(107, 20), rep(99, 20), rep(16, 20), 12.7/2, 0) + 0.1,
+  ymax = c(204, rep(170, 20), rep(162, 20), rep(107, 20), rep(99, 20), 16, 12.7/2) - 0.1
 )
 
 dfdove <- fun_dove(res$darts)
@@ -76,24 +87,24 @@ ggplot(df) +
   coord_polar(start = 0.157) +
   geom_point(aes(x = 0, y = 0), shape = 21, size = 10, color = "grey", fill = "#01a33a") +
   geom_point(aes(x = 0, y = 0), shape = 21, size = 4, color = "grey", fill = "#fe100f") +
-  geom_point(data = dfdove, aes(x = x, y = y), color = "blue", size = 1, shape = 4) +
+  geom_point(data = dfdove, aes(x = x, y = y), color = "royalblue2", size = 1, shape = 4) +
   theme_void()
 
 
 
 ```
 
-Statistics
-========================================================================
+# Statistics
+
 
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Darts count 
 
 ``` {r}
-library(kableExtra)
-kable(res$dataset_count_perc) %>%
-  kable_styling()
+
+kable(res$dataset_count_perc, align = "c") %>%
+  kable_styling(bootstrap_options = c("hover", "responsive"))
 ```
 
 ### Scores
@@ -102,14 +113,14 @@ kable(res$dataset_count_perc) %>%
 
 ``` {r}
 library(kableExtra)
-kable(res$dataset_mean_sd) %>%
+kable(res$dataset_mean_sd, align = "c") %>%
   kable_styling()
 ```
 
 **Power scoring**
 ``` {r}
 library(kableExtra)
-kable(res$dataset_power) %>%
+kable(res$dataset_power, align = "c") %>%
   kable_styling()
 ```
 
@@ -119,15 +130,15 @@ Column {.tabset}
 
 ``` {r}
 library(kableExtra)
-kable(res$dataset_checkouts) %>%
-  kable_styling()
+kable(res$dataset_checkouts, align = "c") %>%
+  kable_styling(bootstrap_options = c("hover", "responsive"))
 ```
 
 ### Doubles
 
 ``` {r}
 library(kableExtra)
-kable(res$dataset_doubles) %>%
-  kable_styling()
+kable(res$dataset_doubles, align = "c") %>%
+  kable_styling(bootstrap_options = c("hover", "responsive"))
 ```
 

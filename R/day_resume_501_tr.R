@@ -29,6 +29,7 @@
 #' @import dplyr
 #' @importFrom purrr is_empty
 #' @importFrom magrittr %>%
+#' @importFrom rmarkdown render
 #' @export
 
 day_resume_501_tr <- function(pattern){
@@ -104,8 +105,8 @@ day_resume_501_tr <- function(pattern){
         as.data.frame() %>%
         arrange(factor(x = ., levels = levels, ordered = T)) %>%
         group_by(factor(x = ., levels =  levels, ordered = T)) %>%
-        summarise(`All darts` = n()) %>%
-        mutate(`All darts` = paste(`All darts`, " (", round(`All darts`/sum(`All darts`), 2), "%)", sep = ""))
+        summarise(`all darts` = n()) %>%
+        mutate(`all darts` = paste(`all darts`, " (", round(`all darts`/sum(`all darts`), 2), "%)", sep = ""))
 
       # tlevels <- as.data.frame(levels) %>%
       #   arrange(factor(x = levels, levels = levels, ordered = T)) %>%
@@ -154,12 +155,19 @@ day_resume_501_tr <- function(pattern){
         df_doubles$hit[is.na(df_doubles$hit)] <- 0
         df_doubles$miss[is.na(df_doubles$miss)] <- 0
         df_doubles <- df_doubles %>%
-          mutate(`hit rate` = paste(`hit`/(`hit`+`miss`)*100, "%", sep = ""))
+          mutate(`hit rate` = paste(round(`hit`/(`hit`+`miss`)*100, 2), "%", sep = ""))
+
+
 
       } else {
         df_doubles <- tclosing %>%
           mutate(`miss` = 0, `hit rate` = "100%")
       }
+
+      overall_double <- data.frame( "overall", sum(df_doubles$hit), sum(df_doubles$miss), paste(round(sum(df_doubles$hit)/sum(df_doubles$miss)*100, 2), "%", sep=""))
+      colnames(overall_double) <- colnames(df_doubles)
+
+      df_doubles <- rbind(df_doubles, overall_double)
 
     # dataset mean and sd
       first_darts_num <- as.numeric(from_chr_to_score_vector[c(first_darts)])
@@ -208,6 +216,19 @@ day_resume_501_tr <- function(pattern){
 
     save_summary <- paste("save(res, file = '", Sys.Date(),"_summary.Rdata')", sep = "")
     eval(parse(text = save_summary))
+
+    # create file html
+    output_name <- paste(getwd(), "/", Sys.Date(), "_dashboard.html", sep = "")
+    filenameparams <- paste(getwd(), "/", Sys.Date(),"_summary.Rdata", sep = "")
+
+    render(input = "dash.Rmd",
+           params = list(filename = filenameparams,
+                    set_title = paste(Sys.Date(), "resume"),
+                    wd = getwd()),
+           output_file = output_name,
+    )
+
+
 
     # return
     return(res)
