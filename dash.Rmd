@@ -2,6 +2,7 @@
 title: "`r params$set_title`"
 params:
   filename : "/Users/matteo/Desktop/scores/2021-04-25_summary.Rdata"
+  filenameall: "/Users/matteo/Desktop/scores/2021-04-27_resall.Rdata"
   set_title: "summary"
   wd: "~/desktop"
 output: 
@@ -21,6 +22,8 @@ library(ggplot2)
 library(kableExtra)
 library(ggforce)
 load(params$filename)
+load(params$filenameall)
+library(darts)
 
 ```
 
@@ -35,6 +38,7 @@ fun_dove <- function(scores){
   }
   return(data.frame(scores = scores, x = x, y = y))
 }
+frasi <- frasi_dash_ita(res, resall)
 ```
 
 # Resume 
@@ -43,7 +47,7 @@ Column
 -----------------------------------------------------------------------
 ### Commentary
 <br>
-Oggi è stata una ` ` giornata: hai giocato ` ` leg, ` ` solito, tirando ` ` frecce, con un punteggio medio per tre frecce pari a ` `, ` `.  
+Oggi è stata una `r frasi$giornata` giornata: hai giocato `r res$number_of_legs` leg, `r frasi$n_leg` solito, tirando ` ` frecce, con un punteggio medio per tre frecce pari a ` `, ` `.  
 
 Il leg migliore è stato il ` `, in cui hai chiuso in ` ` frecce e con un checkout di ` `.  
 

@@ -157,15 +157,16 @@ day_resume_501_tr <- function(pattern){
         df_doubles <- df_doubles %>%
           mutate(`hit rate` = paste(round(`hit`/(`hit`+`miss`)*100, 2), "%", sep = ""))
 
-
-
       } else {
         df_doubles <- tclosing %>%
           mutate(`miss` = 0, `hit rate` = "100%")
       }
 
-      overall_double <- data.frame( "overall", sum(df_doubles$hit), sum(df_doubles$miss), paste(round(sum(df_doubles$hit)/sum(df_doubles$miss)*100, 2), "%", sep=""))
+      overall_double <- data.frame( "overall", sum(df_doubles$hit), sum(df_doubles$miss), paste(round(sum(df_doubles$hit)/(sum(df_doubles$miss)+sum(df_doubles$hit))*100, 2), "%", sep=""))
       colnames(overall_double) <- colnames(df_doubles)
+      if (overall_double$`hit rate` == "Inf%") {
+        overall_double$`hit rate` <- "100%"
+      }
 
       df_doubles <- rbind(df_doubles, overall_double)
 
@@ -211,6 +212,12 @@ day_resume_501_tr <- function(pattern){
                 "dataset_power" = df_power
     )
 
+    # create resume
+    resall <- resume_all_501_tr()
+
+    save_resall <- paste("save(resall, file = '", Sys.Date(),"_resall.Rdata')", sep = "")
+    eval(parse(text = save_resall))
+
     # saving files
     save_leg <- paste("save(", paste(list_to_use, collapse = ", "), ", file = '", Sys.Date(),"_legs.Rdata')", sep = "")
     eval(parse(text = save_leg))
@@ -221,9 +228,11 @@ day_resume_501_tr <- function(pattern){
     # create file html
     output_name <- paste(getwd(), "/", Sys.Date(), "_dashboard.html", sep = "")
     filenameparams <- paste(getwd(), "/", Sys.Date(),"_summary.Rdata", sep = "")
+    filenameparamsall <- paste(getwd(), "/", Sys.Date(),"_resall.Rdata", sep = "")
 
     render(input = "dash.Rmd",
            params = list(filename = filenameparams,
+                         filenameall = filenameparamsall,
                     set_title = paste(Sys.Date(), "resume"),
                     wd = getwd()),
            output_file = output_name,

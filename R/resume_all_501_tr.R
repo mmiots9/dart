@@ -1,4 +1,37 @@
-resume_all <- function(){
+#' @name resume_all_501_tr
+#' @title Overall resumes
+#' @description This function is used to create a summary list of all the legs played.
+#' @usage resume_all_501_tr()
+#' @returns A list containing:
+#' \item{number of legs}{number of played legs}
+#' \item{darts}{character vector of all the scores of the thrown darts}
+#' \item{1st darts}{character vector of all the scores of the first thrown darts}
+#' \item{2nd darts}{character vector of all the scores of the second thrown darts}
+#' \item{3rd darts}{character vector of all the scores of the third thrown darts}
+#' \item{number of darts}{number of thrown darts}
+#' \item{180}{number of 180s}
+#' \item{140+}{number of 140+}
+#' \item{100+}{number of 100+}
+#' \item{checkouts}{checkouts score}
+#' \item{closing doubles}{doubles that closed the legs}
+#' \item{missed doubles}{number of missed doubles}
+#' \item{missed}{character vector of all missed doubles}
+#' \item{checkout rate}{checkout rate}
+#' \item{busted}{number of busted}
+#' \item{dataset_count_perc}{dataset containing counts for each possible dart score}
+#' \item{dataset_checkouts}{dataset containing counts for checkouts}
+#' \item{dataset_doubles}{dataset containing counts for missed and closing doubles}
+#' \item{dataset_mean_sd}{dataset containing mean and sd values for all 3 darts}
+#' \item{dataset_power}{dataset containing power scoring counts}
+#' @author Matteo Miotto
+#' @importFrom stringr str_subset str_remove
+#' @import dplyr
+#' @importFrom purrr is_empty
+#' @importFrom magrittr %>%
+#' @importFrom rmarkdown render
+#' @export
+
+resume_all_501_tr <- function(){
 
   # set useful vectors
   n_of_legs <- darts <- first_darts <- second_darts <-third_darts <- number_of_darts <- checkouts <- closing_doubles <- missed_doubles <- missed <- busted <- `100+` <- `140+` <- `180` <- NULL
@@ -128,8 +161,11 @@ resume_all <- function(){
       mutate(`miss` = 0, `hit rate` = "100%")
   }
 
-  overall_double <- data.frame( "overall", sum(df_doubles$hit), sum(df_doubles$miss), paste(round(sum(df_doubles$hit)/sum(df_doubles$miss)*100, 2), "%", sep=""))
+  overall_double <- data.frame( "overall", sum(df_doubles$hit), sum(df_doubles$miss), paste(round(sum(df_doubles$hit)/(sum(df_doubles$miss)+sum(df_doubles$hit))*100, 2), "%", sep=""))
   colnames(overall_double) <- colnames(df_doubles)
+  if (overall_double$`hit rate` == "Inf%") {
+    overall_double$`hit rate` <- "100%"
+  }
 
   df_doubles <- rbind(df_doubles, overall_double)
 
@@ -153,7 +189,7 @@ resume_all <- function(){
 
 
   # create complete list
-  res <- list("number_of_legs" = n_of_legs,
+  res_all <- list("number_of_legs" = n_of_legs,
               "darts" = darts,
               "1st_darts" = first_darts,
               "2nd_darts" = second_darts,
@@ -196,6 +232,6 @@ resume_all <- function(){
   #
 
   # return
-  return(res)
+  return(res_all)
 
 }
