@@ -178,7 +178,7 @@ day_resume_501_tr <- function(pattern){
       first_darts_meands <- paste(round(mean(first_darts_num), 2), "±", round(sd(first_darts_num), 2))
       second_darts_meands <- paste(round(mean(second_darts_num), 2), "±", round(sd(second_darts_num), 2))
       third_darts_meands <- paste(round(mean(third_darts_num), 2), "±", round(sd(third_darts_num), 2))
-      darts_meands <- paste(round(mean(darts_num), 2), "±", round(sd(darts_num), 2))
+      darts_meands <- paste(round(mean(darts_num)*3, 2), "±", round(sd(darts_num), 2))
 
       df_mean_sd <- data.frame(first_darts_meands, second_darts_meands, third_darts_meands, darts_meands)
       colnames(df_mean_sd) <- colnames(df_count_perc)[-1]
@@ -200,8 +200,9 @@ day_resume_501_tr <- function(pattern){
                 "n140plus" = `140+`,
                 "n100plus" = `100+`,
                 "missed_doubles" = missed_doubles,
+                "closing_doubles" = closing_doubles,
                 "missed" = missed,
-                "checkout_rate" = n_of_legs/(missed_doubles + n_of_legs)*100,
+                "checkout_rate" = n_of_legs/(sum(missed_doubles) + n_of_legs)*100,
                 "busted" = busted,
                 "dataset_count_perc" = df_count_perc,
                 "dataset_checkouts" = df_checkouts,
