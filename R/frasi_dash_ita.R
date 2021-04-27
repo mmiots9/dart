@@ -1,9 +1,12 @@
 #' @name frasi_dash_ita
 #' @title Frasi per dashboard ita
 #' @author Matteo Miotto
+#' @importFrom purrr is_empty
 #' @export
 
 frasi_dash_ita <- function(daily, overall){
+
+  consigli <- NULL
 
   # medie
   day_mean  <- as.numeric(strsplit(daily$dataset_mean_sd$`all darts`, " ")[[1]][1])
@@ -69,11 +72,16 @@ frasi_dash_ita <- function(daily, overall){
   # opzioni: Hai-alcune-: vs Non hai-alcuna-.
   # opzioni seconda parte: quali doppie eventualmente o ""
 
-  if(all(daily$dataset_doubles$`hit rate` != "0%")) {
+  if(all(daily$dataset_doubles$`hit rate` > "30%") | all(daily$dataset_doubles$`hit rate` == "100%")) {
     crit_doppie <- c("Non hai", "le", ".")
   } else {
-    quali_doppie <- paste(daily$dataset_doubles$score[which(daily$dataset_doubles$`hit rate` == "0%")], collapse = ", ")
+    quali_doppie <- paste(daily$dataset_doubles$score[which(daily$dataset_doubles$`hit rate` < "35%")])
+    if ("overall" %in% quali_doppie) {quali_doppie <- quali_doppie[-which(quali_doppie == "overall")]}
+
+    quali_doppie <- paste(quali_doppie, collapse = ", ")
+
     crit_doppie  <- c("Hai", "alcune", paste(":", quali_doppie))
+    consigli <- paste(consigli, "<li>Allenati sulle doppie in cui hai avuto criticità oggi</li>")
   }
 
 # Punti di forza
@@ -92,26 +100,47 @@ frasi_dash_ita <- function(daily, overall){
     punti_forza <- paste(punti_forza, "<li>Precisione in doppia</li>")
   }
 
-  punti_forza <- paste("<ul>", punti_forza, "</ul>")
+  if (is_empty(punti_forza)){
+    punti_forza <- "Nessuno, forse dovresti allenarti senza pensare ad altro..."
+  } else {
+    punti_forza <- paste("<ul>", punti_forza, "</ul>")
+  }
 
-# Punti deboli
+
+# Punti deboli e consigli
   punti_deboli <- NULL
+
 
   # no power scoring
   if (day_power < (all_power - 2)) {
     punti_deboli <- paste(punti_deboli, "<li>Power scoring</li>")
+    consigli <- paste(consigli, "<li>Allenati sulle triple dal 17 al 20</li>")
   }
   # Chiusure alte
-  if (mean(daily$checkouts) > 70) {
+  if (mean(daily$checkouts) < 70) {
     punti_deboli <- paste(punti_deboli, "<li>Chiusure alte</li>")
+    consigli <- paste(consigli, "<li>Prova alcune chiusure alte, cercando di rimaner concentrato dalla prima all'ultima freccia</li>")
   }
 
   # Precisione in doppia
-  if (daily$checkout_rate > 50) {
+  if (daily$checkout_rate < 50) {
     punti_deboli <- paste(punti_deboli, "<li>Precisione in doppia</li>")
+    consigli <- paste(consigli, "<li>Fai un bell'Around the clock in doppia</li>")
   }
 
-  punti_deboli <- paste("<ul>", punti_deboli, "</ul>")
+
+  if (is_empty(punti_deboli)){
+    punti_deboli <- "Incredibilmente nessuno, un miracolo?!"
+  } else {
+    punti_deboli <- paste("<ul>", punti_deboli, "</ul>")
+  }
+
+  # Consigli
+  if (is_empty(consigli)){
+    consigli <- "Bevi birra, che oggi sei andato bene"
+  } else {
+    consigli <- paste("<ul>", consigli, "</ul>")
+  }
 
 
   frasi_lista <- list("giornata" = giornata,
@@ -121,7 +150,8 @@ frasi_dash_ita <- function(daily, overall){
                             "confr_doppie" = confr_doppie,
                             "crit_doppie" = crit_doppie,
                             "punti_forza" = punti_forza,
-                            "punti_deboli" = punti_deboli
+                            "punti_deboli" = punti_deboli,
+                      "consigli" = consigli
                             )
 
   return(frasi_lista)

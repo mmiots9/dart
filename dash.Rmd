@@ -47,30 +47,27 @@ Column
 -----------------------------------------------------------------------
 ### Commentary
 <br>
-Oggi è stata una `r frasi$giornata` giornata: hai giocato `r res$number_of_legs` leg, `r frasi$n_leg` solito, tirando ` ` frecce, con un punteggio medio per tre frecce pari a ` `, ` `.  
+Oggi è stata una `r frasi$giornata` giornata: hai giocato `r res$number_of_legs` leg, `r frasi$n_leg` solito, tirando `r res$number_of_darts ` frecce, con un punteggio medio per tre frecce pari a `r round(res$number_of_legs*501*3/res$number_of_darts, 2)`, `r frasi$media_conf`.  
 
-Il leg migliore è stato il ` `, in cui hai chiuso in ` ` frecce e con un checkout di ` `.  
+Il leg migliore è stato il `r which(res$number_of_darts == min(res$number_of_darts))`, in cui hai chiuso in `r  min(res$number_of_darts)` frecce e con un checkout di `r res$checkouts[which(res$number_of_darts == min(res$number_of_darts))]`.  
 
-In quanto a power scoring, ` `: ` ` 180, ` ` 140+ e ` ` 100+.  
+In quanto a power scoring, `r frasi$power_sc`: `r sum(res$n180)` 180, `r sum(res$n140plus)` 140+ e `r sum(res$n100plus)` 100+.  
 
-In zona checkout, la migliore chiusura è stata ` ` nel leg ` `. La percentuale in doppia è ` `, ` `.  
-` ` avuto criticità con ` ` doppie` `
+In zona checkout, la migliore chiusura è stata `r max(res$checkouts)` nel leg `r  which(res$checkouts == min(res$checkouts))`. La percentuale in doppia è stata `r res$checkout_rate `%, `r frasi$confr_doppie `.  
+`r frasi$crit_doppie[1]` avuto criticità con `r frasi$crit_doppie[2] ` doppie`r frasi$crit_doppie[3]`
 
-**Punti di forza**
-
+**Punti di forza**  
 Oggi i tuoi punti di forza sono stati:  
-` `
+`r frasi$punti_forza `
 
-**Punti deboli**
-
+**Punti deboli**  
 Oggi i tuoi punti deboli sono stati:  
-` `
+`r frasi$punti_deboli `
 
 
-**Consigli**
-
-Durante il prossimo allenamento focalizzati su:  
-` `
+**Consigli**  
+Nel prossimo allenamento:  
+`r frasi$consigli `
 
 
 Column 
