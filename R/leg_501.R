@@ -184,8 +184,11 @@ leg_501 <- function(player1, player2) {
  if (p1.score == 0) {winner <- player1} else {winner <- player2}
 
  # return
- legres <- list("winner"   = winner,
-                "p1.stats" = p1.stats,
-                "p2.stats" = p2.stats)
+ t <- paste("legres <- list('winner' = winner,", player1, ".leg.stats", "= p1.stats,", player2, ".leg.stats", "= p2.stats)", sep ="")
+
+ eval(parse(text = t))
+
+ cat(paste("Congratulations", winner), "You've won this leg", "\n")
+
  return(legres)
 }
