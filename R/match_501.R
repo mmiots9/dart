@@ -38,11 +38,11 @@ match_501 <- function(player1, player2, nsets = 1, nlegs = 1){
   # apro set
 
 
-  while ((p1.sets != nsets) | (p2.sets != nsets)) {
+  while ((p1.sets != nsets) & (p2.sets != nsets)) {
 
     # set intro
     cat(paste("Set", which_set), "Game on!", "\n")
-    Sys.sleep(2)
+
 
     # change players turn
     if (which_set%%2 == 0) {
@@ -53,7 +53,7 @@ match_501 <- function(player1, player2, nsets = 1, nlegs = 1){
       }
 
     # launch set function
-    text1 <- paste("s", which_set, "<- set_501(play1, play2, nlegs = nlegs, match.id = match.id, which_set = which_set, which_leg_match = which_leg_match)" ,sep = "")
+    text1 <- paste("s", which_set, "<- set_501(play1, play2, nlegs = nlegs, match.id = m.ID, which_set = which_set, which_leg_match = which_leg_match)" ,sep = "")
     eval(parse(text = text1))
 
     # set and leg count

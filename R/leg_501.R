@@ -192,7 +192,7 @@ leg_501 <- function(player1, player2, n.leg.set, set.id, match.id, n.leg.match) 
               group_by(scores) %>%
               summarise(hit = n())
 
-            doubles.df <- full_join(missed.df, closing.df)
+            doubles.df <- suppressMessages(full_join(missed.df, closing.df))
             doubles.df <- doubles.df[-c(is.na(doubles.df$scores)),]
             doubles.df$hit[is.na(doubles.df$hit)] <- 0
             doubles.df$missed[is.na(doubles.df$missed)] <- 0
@@ -230,7 +230,7 @@ leg_501 <- function(player1, player2, n.leg.set, set.id, match.id, n.leg.match) 
           group_by(scores) %>%
           summarise(hit = n())
 
-        doubles.df <- full_join(missed.df, closing.df)
+        doubles.df <- suppressMessages(full_join(missed.df, closing.df))
         doubles.df <- doubles.df[-c(is.na(doubles.df$scores)),]
         doubles.df$hit[is.na(doubles.df$hit)] <- 0
         doubles.df$missed[is.na(doubles.df$missed)] <- 0
@@ -278,6 +278,7 @@ leg_501 <- function(player1, player2, n.leg.set, set.id, match.id, n.leg.match) 
  eval(parse(text = t))
 
  cat(paste("Congratulations ", winner, "!", sep =""), "You've won this leg", "\n")
+ Sys.sleep(0.5)
 
  return(legres)
 }

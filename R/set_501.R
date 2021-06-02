@@ -98,7 +98,8 @@ set_501 <- function(player1, player2, nlegs = 1, which_set, match.id, which_leg_
         "n.played.legs" = which_leg_set - 1
       )
 
-  cat(paste("Congratulations ", winner, "!", sep = ""), "You've won this set")
+  cat(paste("Congratulations ", winner, "!", sep = ""), "You've won this set", "\n")
+  Sys.sleep(0.5)
 
   # return
   tres <- paste("setres <- list('set.stat' = set.stat.df,", player1, ".set.stat =", player1, ".set.stats,",
