@@ -14,7 +14,7 @@
 #' @importFrom dplyr all_of mutate arrange group_by summarise full_join
 #' @importFrom magrittr %>%
 #' @export
-leg_501 <- function(player1, player2, n.leg.set, set.id, match.id, n.leg.match) {
+leg_501 <- function(player1, player2, n.leg.set, set.id, match.id, n.leg.match, df.print) {
 
   # leg id
     sytime <- paste(unlist(str_split(
@@ -36,21 +36,27 @@ leg_501 <- function(player1, player2, n.leg.set, set.id, match.id, n.leg.match) 
   doubles <- c((1:20)*2, 50)
   levels <- c("0", as.character(1:20) ,paste("d", c(1:20), sep = ""), paste("t", c(1:20), sep = ""), "25", "d25")
 
+
+
+  # print df
+  hux(df.print) %>%
+    set_position("left")%>%
+    set_align(everywhere, everywhere, "center") %>%
+    print_screen(colnames = F)
+
+  cat("\n")
+
   while ((p1.score !=0) & (p2.score !=0)) {
 
     p1.hand_scores_chr <- p2.hand_scores_chr <- NA
 
     # player 1
       while (!all(all_of(p1.hand_scores_chr %in% from_chr_to_score_names))){
+
         # ask for scored points for 3 darts
-        form <- list("Darts score:TXT" = "")
-        form_title <- paste(player1, "score is:", as.character(p1.score))
-        p1.hand_score <- unlist(dlg_form(form, message = "Insert the value for the thrown darts separated by a comma (,) in the following form:
-                                          o#: for outer singles
-                                          i#: for inner singles
-                                          d#: for doubles
-                                          t#: for triples",
-                                      title = form_title)$res)
+        form <- list("Darts score:TXT" = "1st dart, 2nd dart, 3rd dart")
+        form_title <- paste(player1, "'s turn")
+        p1.hand_score <- unlist(dlg_form(form, title = form_title)$res)
 
         # extrapolate dart score as chr and num vector
         p1.hand_scores_chr <- as.character( trimws( unlist( strsplit(p1.hand_score, split = ",")), which = "both"))
@@ -93,12 +99,24 @@ leg_501 <- function(player1, player2, n.leg.set, set.id, match.id, n.leg.match) 
     # count number of darts
     p1.n_of_darts <- p1.n_of_darts + length(p1.hand_scores_chr)
 
+    # print df
+    cat("\n")
+    df.print$scores[df.print$player == player1] <- p1.score
+    hux(df.print) %>%
+      set_position("left")%>%
+      set_align(everywhere, everywhere, "center") %>%
+      print_screen(colnames = F)
+
+    cat("\n")
+
 
     # checkout
     if (p1.score == 0){
       p1.checkout <- sum(p1.hand_scores_num)
       p1.closing_double <- p1.hand_scores_chr[length(p1.hand_scores_chr)]
       p2.checkout <- NA
+      df.print$scores[df.print$player == player1] <- 501
+      df.print$scores[df.print$player == player2] <- 501
       next
     }
 
@@ -107,14 +125,9 @@ leg_501 <- function(player1, player2, n.leg.set, set.id, match.id, n.leg.match) 
     # player 2
     while (!all(all_of(p2.hand_scores_chr %in% from_chr_to_score_names))){
       # ask for scored points for 3 darts
-      form <- list("Darts score:TXT" = "")
-      form_title <- paste(player2, "score is:", as.character(p2.score))
-      p2.hand_score <- unlist(dlg_form(form, message = "Insert the value for the thrown darts separated by a comma (,) in the following form:
-                                        o#: for outer singles
-                                        i#: for inner singles
-                                        d#: for doubles
-                                        t#: for triples",
-                                       title = form_title)$res)
+      form <- list("Darts score:TXT" = "1st dart, 2nd dart, 3rd dart")
+      form_title <- paste(player2, "'s turn")
+      p2.hand_score <- unlist(dlg_form(form, title = form_title)$res)
 
       # extrapolate dart score as chr and num vector
       p2.hand_scores_chr <- as.character( trimws( unlist( strsplit(p2.hand_score, split = ",")), which = "both"))
@@ -157,12 +170,24 @@ leg_501 <- function(player1, player2, n.leg.set, set.id, match.id, n.leg.match) 
     # count number of darts
     p2.n_of_darts <- p2.n_of_darts + length(p2.hand_scores_chr)
 
+    # print df
+    cat("\n")
+    df.print$scores[df.print$player == player2] <- p2.score
+    hux(df.print) %>%
+      set_position("left")%>%
+      set_align(everywhere, everywhere, "center") %>%
+      print_screen(colnames = F)
+    cat("\n")
+
+
 
     # checkout
     if (p2.score == 0){
       p2.checkout <- sum(p2.hand_scores_num)
       p2.closing_double <- p2.hand_scores_chr[length(p2.hand_scores_chr)]
       p1.checkout <- NA
+      df.print$scores[df.print$player == player1] <- 501
+      df.print$scores[df.print$player == player2] <- 501
     }
   }
 

@@ -15,7 +15,7 @@
 #' @importFrom dplyr all_of
 #' @export
 
-set_501 <- function(player1, player2, nlegs = 1, which_set, match.id, which_leg_match){
+set_501 <- function(player1, player2, nlegs = 1, which_set, match.id, which_leg_match, df.print){
 
   # set useful values
   p1.legs <- p2.legs <- 0
@@ -30,8 +30,12 @@ set_501 <- function(player1, player2, nlegs = 1, which_set, match.id, which_leg_
   while ((p1.legs != nlegs) & (p2.legs != nlegs)) {
 
     # leg
-    cat(paste("Leg", which_leg_set), "Game on!", "\n")
+    cat(paste("Leg", which_leg_set), "Game on!", "\n", "\n")
     Sys.sleep(2)
+
+    # change leg values in df print
+    df.print$legs[df.print$player == player1] <- p1.legs
+    df.print$legs[df.print$player == player2] <- p2.legs
 
     # change players turn
     if (which_leg_set%%2 == 0) {
@@ -42,7 +46,7 @@ set_501 <- function(player1, player2, nlegs = 1, which_set, match.id, which_leg_
       }
 
     # launch leg function
-    text1 <- paste("s", which_set, "l", which_leg_set, "<- leg_501(play1, play2, n.leg.set = which_leg_set, set.id = s.ID, match.id = match.id, n.leg.match = which_leg_match)" ,sep = "")
+    text1 <- paste("s", which_set, "l", which_leg_set, "<- leg_501(play1, play2, n.leg.set = which_leg_set, set.id = s.ID, match.id = match.id, n.leg.match = which_leg_match, df.print)" ,sep = "")
     eval(parse(text = text1))
 
     # leg count

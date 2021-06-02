@@ -28,6 +28,12 @@ match_501 <- function(player1, player2, nsets = 1, nlegs = 1){
   which_set <- 1
   p1.sets <- p2.sets <- 0
 
+  # df to print scores
+  df.print <- data.frame(player = c(player1, player2),
+                         sets = c(0,0),
+                         legs = c(0,0),
+                         scores = c(501, 501))
+
   sytime <- paste(unlist(str_split(
     paste(unlist(str_split(
       paste(unlist(str_split(Sys.time(), pattern = c(" "))), collapse = ""),
@@ -35,13 +41,23 @@ match_501 <- function(player1, player2, nsets = 1, nlegs = 1){
     pattern = c(":"))), collapse = "")
   m.ID <- paste("m", sytime, sep = "")
 
-  # apro set
+  # show instructions in first leg
+    dlg_form(form = list("Press Enter to start"=""), message = "To record the scores, for each hand insert the value for the thrown darts separated by a comma (,) in the following form:
+                                          o#: for outer singles
+                                          i#: for inner singles
+                                          d#: for doubles
+                                          t#: for trebles \n For example: t20, o19, i19",
+             title = "Instructions")
 
 
   while ((p1.sets != nsets) & (p2.sets != nsets)) {
 
     # set intro
     cat(paste("Set", which_set), "Game on!", "\n")
+
+    # change set values in df print
+    df.print$sets[df.print$player == player1] <- p1.sets
+    df.print$sets[df.print$player == player2] <- p2.sets
 
 
     # change players turn
@@ -53,7 +69,7 @@ match_501 <- function(player1, player2, nsets = 1, nlegs = 1){
       }
 
     # launch set function
-    text1 <- paste("s", which_set, "<- set_501(play1, play2, nlegs = nlegs, match.id = m.ID, which_set = which_set, which_leg_match = which_leg_match)" ,sep = "")
+    text1 <- paste("s", which_set, "<- set_501(play1, play2, nlegs = nlegs, match.id = m.ID, which_set = which_set, which_leg_match = which_leg_match, df.print)" ,sep = "")
     eval(parse(text = text1))
 
     # set and leg count
