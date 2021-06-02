@@ -11,7 +11,8 @@
 #' @author Matteo Miotto
 #' @importFrom svDialogs dlg_form
 #' @importFrom stringr str_split
-#' @importFrom dplyr all_of
+#' @importFrom dplyr all_of mutate arrange group_by summarise full_join
+#' @importFrom magrittr %>%
 #' @export
 leg_501 <- function(player1, player2, n.leg.set, set.id, match.id, n.leg.match) {
 
@@ -183,7 +184,7 @@ leg_501 <- function(player1, player2, n.leg.set, set.id, match.id, n.leg.match) 
                                    "busted" = p1.busted)
 
         # doubles df
-          if (!is.na(p1.missed_doubles) & !is.na(p1.closing_double)) {
+          if (!is.na(p1.missed_doubles) | !is.na(p1.closing_double)) {
             missed.df <- data.frame(scores = p1.missed_doubles) %>%
               group_by(scores) %>%
               summarise(missed = n())
@@ -192,6 +193,7 @@ leg_501 <- function(player1, player2, n.leg.set, set.id, match.id, n.leg.match) 
               summarise(hit = n())
 
             doubles.df <- full_join(missed.df, closing.df)
+            doubles.df <- doubles.df[-c(is.na(doubles.df$scores)),]
             doubles.df$hit[is.na(doubles.df$hit)] <- 0
             doubles.df$missed[is.na(doubles.df$missed)] <- 0
 
@@ -220,7 +222,7 @@ leg_501 <- function(player1, player2, n.leg.set, set.id, match.id, n.leg.match) 
                                    "busted" = p2.busted)
 
       # doubles df
-      if (!is.na(p2.missed_doubles) & !is.na(p2.closing_double)) {
+      if (!is.na(p2.missed_doubles) | !is.na(p2.closing_double)) {
         missed.df <- data.frame(scores = p2.missed_doubles) %>%
           group_by(scores) %>%
           summarise(missed = n())
@@ -229,6 +231,7 @@ leg_501 <- function(player1, player2, n.leg.set, set.id, match.id, n.leg.match) 
           summarise(hit = n())
 
         doubles.df <- full_join(missed.df, closing.df)
+        doubles.df <- doubles.df[-c(is.na(doubles.df$scores)),]
         doubles.df$hit[is.na(doubles.df$hit)] <- 0
         doubles.df$missed[is.na(doubles.df$missed)] <- 0
 

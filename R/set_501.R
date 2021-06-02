@@ -41,12 +41,12 @@ set_501 <- function(player1, player2, nlegs = 1, which_set, match.id, which_leg_
         play2 <- player2
       }
 
+    # launch leg function
     text1 <- paste("s", which_set, "l", which_leg_set, "<- leg_501(play1, play2, n.leg.set = which_leg_set, set.id = s.ID, match.id = match.id, n.leg.match = which_leg_match)" ,sep = "")
     eval(parse(text = text1))
 
-    text2 <- paste("s", which_set, "l", which_leg_set, sep = "")
-
     # leg count
+    text2 <- paste("s", which_set, "l", which_leg_set, sep = "")
     if (eval(parse(text = text2))$leg.stat$winner == player1) {p1.legs <- p1.legs + 1} else {p2.legs <- p2.legs + 1}
     which_leg_set <- which_leg_set + 1
     which_leg_match <- which_leg_match + 1
@@ -62,7 +62,7 @@ set_501 <- function(player1, player2, nlegs = 1, which_set, match.id, which_leg_
       set_legs <- str_subset(ls(), paste("s", which_set, sep = ""))
 
       # retrieve first leg stat
-      t.leg1.stat <- paste("s", which_set, "legs.stat <- s",  which_set, "l1$leg.stat", sep = "")
+      t.leg1.stat <- paste("s.legs.stat <- s",  which_set, "l1$leg.stat", sep = "")
       text.stat <- paste("s", which_set, "l1", sep = "")
       t.p1.leg1.stat <- paste(player1, ".set.stats <- eval(parse(text = text.stat))$", player1, ".leg.stats" , sep = "")
       t.p2.leg1.stat <- paste(player2, ".set.stats <- eval(parse(text = text.stat))$", player2, ".leg.stats" , sep = "")
@@ -72,15 +72,17 @@ set_501 <- function(player1, player2, nlegs = 1, which_set, match.id, which_leg_
       eval(parse(text = t.p2.leg1.stat))
 
       # merge with other legs
-      for (i in 2:length(set_legs))
-        t.leg <- paste("s", which_set, "legs.stat <- rbind(s", which_set, "legs.stat, s", which_set, "l", i, "$leg.stat)", sep = "")
-      eval(parse(text = t.leg))
+      if (nlegs > 1) {
+        for (i in 2:length(set_legs))
+          t.leg <- paste("s.legs.stat <- rbind(s.legs.stat, s", which_set, "l", i, "$leg.stat)", sep = "")
+        eval(parse(text = t.leg))
 
-      for (j in 1:length(eval(parse(text = paste("s", which_set, "l", i, "$", player1, ".leg.stats", sep = ""))))) {
-        t.p1.l <- paste(player1, ".set.stats[[", j, "]] <- rbind(", player1, ".set.stats[[", j, "]],", "s", which_set, "l", i, "$", player1, ".leg.stats[[", j, "]])", sep ="")
-        t.p2.l <- paste(player2, ".set.stats[[", j, "]] <- rbind(", player2, ".set.stats[[", j, "]],", "s", which_set, "l", i, "$", player2, ".leg.stats[[", j, "]])", sep ="")
-        eval(parse(text = t.p1.l))
-        eval(parse(text = t.p2.l))
+        for (j in 1:length(eval(parse(text = paste("s", which_set, "l", i, "$", player1, ".leg.stats", sep = ""))))) {
+          t.p1.l <- paste(player1, ".set.stats[[", j, "]] <- rbind(", player1, ".set.stats[[", j, "]],", "s", which_set, "l", i, "$", player1, ".leg.stats[[", j, "]])", sep ="")
+          t.p2.l <- paste(player2, ".set.stats[[", j, "]] <- rbind(", player2, ".set.stats[[", j, "]],", "s", which_set, "l", i, "$", player2, ".leg.stats[[", j, "]])", sep ="")
+          eval(parse(text = t.p1.l))
+          eval(parse(text = t.p2.l))
+      }
 
       }
 
@@ -99,8 +101,8 @@ set_501 <- function(player1, player2, nlegs = 1, which_set, match.id, which_leg_
   cat(paste("Congratulations ", winner, "!", sep = ""), "You've won this set")
 
   # return
-  tres <- paste("setres <- list('set.stat' = set.stat.df,", player1, ".set.stats =", player1, ".set.stats,",
-                player2, ".set.stats =", player2, ".set.stats, s", which_set, ".legs.stat = s", which_set, "legs.stat)", sep = "")
+  tres <- paste("setres <- list('set.stat' = set.stat.df,", player1, ".set.stat =", player1, ".set.stats,",
+                player2, ".set.stat =", player2, ".set.stats, legs.stat = s.legs.stat)", sep = "")
 
   eval(parse(text = tres))
 
