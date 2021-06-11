@@ -1,5 +1,5 @@
 #' @name closing_3
-#' @title closing exercise
+#' @title closing in 3 darts
 #' @description This function is used to train in closures with only 3 darts
 #' @usage closing_3(level)
 #' @param level "beginner" (default), "intermediate or "advanced"
@@ -53,11 +53,11 @@ closing_3 <- function(level = "beginner"){
   }
 
   scores.df <- scores.df %>%
-    mutate("tot.darts" = tot_closed) %>%
+    mutate("tot.closed" = tot_closed) %>%
     mutate("precision" = round(tot_closed/20*100),2)
 
   # change df colnames
-  colnames(scores.df) <- c("year", "month", "day", as.character(1:n), "tot.darts", "precision")
+  colnames(scores.df) <- c("year", "month", "day", as.character(1:10), "tot.closed", "precision")
   filename <- paste("closing_3_", level,".csv", sep = "")
   opened_df <- read.csv(file = filename)
 

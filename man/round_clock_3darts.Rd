@@ -7,7 +7,7 @@
 round_clock_3darts(section)
 }
 \arguments{
-\item{section}{"which section to score in: "s" for singles (default), "d" for doubles or "t" for trebles}
+\item{section}{which section to score in: "s" for singles (default), "d" for doubles or "t" for trebles}
 }
 \description{
 This function is used to play a modified version of around the clock

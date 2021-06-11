@@ -2,7 +2,7 @@
 % Please edit documentation in R/closing_3.R
 \name{closing_3}
 \alias{closing_3}
-\title{closing exercise}
+\title{closing in 3 darts}
 \usage{
 closing_3(level)
 }
