@@ -1,8 +1,15 @@
-
-#' @importFrom pubbr %>%
+#' @name round_clock_3darts
+#' @title round the clock 3 darts
+#' @description This function is used to play a modified version of around the clock
+#' @usage round_clock_3darts(section)
+#' @param section "which section to score in: "s" for singles (default), "d" for doubles or "t" for trebles
+#' @author Matteo Miotto
+#' @importFrom magrittr %>%
 #' @importFrom lubridate month day year
 #' @importFrom svDialogs dlg_form
 #' @importFrom dplyr mutate
+
+#' @export
 
 round_clock_3darts <- function(section = "s"){
 

@@ -1,3 +1,18 @@
+#' @name high_scores
+#' @title hitting high scores exercise
+#' @description This function is used to train hitting high scores sectors
+#' @usage high_scores(sector)
+#' @param sector 20 (default), 19 or 18
+#' @author Matteo Miotto
+#' @importFrom magrittr %>%
+#' @importFrom lubridate month day year
+#' @importFrom svDialogs dlg_form
+#' @importFrom dplyr mutate
+
+#' @export
+
+
+
 high_scores <- function(sector = 20){
   # check input
   if (length(sector) != 1) {stop("sector must have lenght 1")}

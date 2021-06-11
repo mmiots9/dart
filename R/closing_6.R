@@ -1,4 +1,19 @@
-closing_6 <- function(level = "beginner", n = 10){
+#' @name closing_6
+#' @title closing exercise
+#' @description This function is used to train in closures with 3 or 6 darts
+#' @usage closing_6(level)
+#' @param level "beginner" (default), "intermediate or "advanced"
+#' @author Matteo Miotto
+#' @importFrom magrittr %>%
+#' @importFrom lubridate month day year
+#' @importFrom svDialogs dlg_form
+#' @importFrom dplyr mutate
+
+#' @export
+
+
+
+closing_6 <- function(level = "beginner"){
 
   exit <- 41:80
   if (level == "intermediate") {exit <- 81:120}

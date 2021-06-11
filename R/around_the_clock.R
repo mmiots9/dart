@@ -1,9 +1,15 @@
-#' @importFrom pubbr %>%
+#' @name around_the_clock
+#' @title around the clock training session
+#' @description This function is used to play around the clock in training session
+#' @usage around_the_clock(section)
+#' @param section which section to score in: "s" for singles (default), "d" for doubles or "t" for trebles
+#' @author Matteo Miotto
+#' @importFrom magrittr %>%
 #' @importFrom lubridate month day year
 #' @importFrom svDialogs dlg_form
 #' @importFrom dplyr mutate
 
-
+#' @export
 
 around_the_clock <- function(section = "s"){
 

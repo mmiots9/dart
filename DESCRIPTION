@@ -18,5 +18,6 @@ Imports:
   ggplot2,
   kableExtra,
   ggforce,
-  rmarkdown
+  rmarkdown,
+  lubridate
 RoxygenNote: 7.1.1
