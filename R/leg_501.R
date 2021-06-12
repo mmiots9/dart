@@ -114,7 +114,7 @@ leg_501 <- function(player1, player2, n.leg.set, set.id, match.id, n.leg.match, 
     if (p1.score == 0){
       p1.checkout <- sum(p1.hand_scores_num)
       p1.closing_double <- p1.hand_scores_chr[length(p1.hand_scores_chr)]
-      p2.checkout <- NA
+      p1.checkout <- NA
       df.print$scores[df.print$player == player1] <- 501
       df.print$scores[df.print$player == player2] <- 501
       next

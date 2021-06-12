@@ -2,127 +2,158 @@
 #' @title Single leg 501 training
 #' @description This function is used as calculator for a single 501 leg
 #' @usage tr_501()
-#' @returns A list containing:
-#' \item{darts}{character vector of all the scores of the thrown darts}
-#' \item{1st dart}{character vector of all the scores of the first thrown darts}
-#' \item{2nd dart}{character vector of all the scores of the second thrown darts}
-#' \item{3rd dart}{character vector of all the scores of the third thrown darts}
-#' \item{number of darts}{number of thrown darts}
-#' \item{180}{number of 180s}
-#' \item{140+}{number of 140+}
-#' \item{100+}{number of 100+}
-#' \item{checkout}{checkout score}
-#' \item{closing double}{double that closed the leg}
-#' \item{missed doubles}{number of missed doubles}
-#' \item{missed}{character vector of all missed doubles}
-#' \item{busted}{number of busted}
 #' @author Matteo Miotto
-#' @importFrom svDialogs dlg_form
+#' @importFrom svDialogs dlg_form dlg_dir
 #' @importFrom stringr str_detect
+#' @importFrom magrittr %>%
+#' @importFrom lubridate month day year
 #' @export
 
 tr_501 <- function(){
 
-  # set useful vectors
-    score <- 501
-    thrown_darts_score <- first_dart <- second_dart <- third_dart <- missed <- NULL
-    from_chr_to_score_vector <- c(0, 1:20, 1:20, (1:20)*2, (1:20)*3, 25, 50)
-    from_chr_to_score_names  <- c("0", paste("o",(1:20), sep = ""), paste("i",(1:20), sep = ""), paste("d", c(1:20), sep = ""), paste("t", c(1:20), sep = ""), "25", "d25")
-    names(from_chr_to_score_vector) <- from_chr_to_score_names
-    n_of_darts <- busted <- missed_doubles <- `100+` <- `140+` <- `180` <- 0
-    doubles <- c((1:20)*2, 50)
+  if(!("trleg.csv" %in% list.files())){
+  save_dir <- dlg_dir()$res
+  setwd(save_dir)
+  }
 
+  # set useful values
+  score <- 501
+  thrown_darts_score <- checkout <- NULL
+  n_of_darts <- missed <- plus100 <- plus140 <- plus180 <- plus60 <- n20 <- n19 <- n18 <- n60 <- n57 <- n54 <-  0
 
+  from_chr_to_score_vector <- c(0, 1:20, (1:20)*2, (1:20)*3, 25, 50)
+  from_chr_to_score_names  <- c("0", as.character(1:20), paste("d", c(1:20), sep = ""), paste("t", c(1:20), sep = ""), "25", "d25")
+  names(from_chr_to_score_vector) <- from_chr_to_score_names
+  doubles <- c((1:20)*2, 50)
+  levels <- c("0", as.character(1:20) ,paste("d", c(1:20), sep = ""), paste("t", c(1:20), sep = ""), "25", "d25")
 
+  # show instructions in first leg
+  dlg_form(form = list("Press Enter to start"=""), message = "To record the scores, for each hand insert the value for the thrown darts separated by a comma (,) in the following form:
+                                          #: for singles
+                                          d#: for doubles
+                                          t#: for trebles \n For example: t20, 19, d19",
+           title = "Instructions")
 
-  # open while cycle
-    while(score !=0) {
+  cat("\n")
+
+  while (score !=0) {
+    hand_scores_chr <- NA
+
+    while (!all(all_of(hand_scores_chr %in% from_chr_to_score_names))){
 
       # ask for scored points for 3 darts
-        form <- list("Darts score:TXT" = "")
-        form_title <- paste("Your score is:", as.character(score))
-        hand_score <- unlist(dlg_form(form, message = "Insert the value for the thrown darts separated by a comma (,) in the following form:
-                                      o#: for outer singles
-                                      i#: for inner singles
-                                      d#: for doubles
-                                      t#: for triples",
-                                      title = form_title)$res)
+      form <- list("Darts score:TXT" = "1st dart, 2nd dart, 3rd dart")
+      form_title <- paste("Your score is", score)
+      hand_score <- unlist(dlg_form(form, title = form_title)$res)
 
       # extrapolate dart score as chr and num vector
-        hand_scores_chr <- as.character( trimws( unlist( strsplit(hand_score, split = ",")), which = "both"))
-        hand_scores_num <- as.numeric(from_chr_to_score_vector[c(hand_scores_chr)])
+      hand_scores_chr <- as.character( trimws( unlist( strsplit(hand_score, split = ",")), which = "both"))
+      hand_scores_num <- as.numeric(from_chr_to_score_vector[c(hand_scores_chr)])
 
-      # subtract darts score from score and evaluating if miss double for checkout or bust
-        score_i <- score
-        for (i in seq_along(hand_scores_num)){
-          if(score_i %in% doubles & (score_i - hand_scores_num[i]) !=0 ) {
-            missed_doubles <- missed_doubles + 1
-            missed <- c(missed, paste("d", score_i/2, sep=""))
-          }
-
-          score_i <- score_i -  hand_scores_num[i]
-        }
-
-        if (score -  sum(hand_scores_num) != 1 & (score -  sum(hand_scores_num)) >= 0){
-          score <- score -  sum(hand_scores_num)
-
-          if (sum(hand_scores_num) == 180){
-            `180` <- `180` + 1
-          } else if (sum(hand_scores_num) >= 140){
-              `140+` <- `140+` + 1
-          } else if (sum(hand_scores_num) >= 100){
-            `100+` <- `100+` + 1
-          }
-
-        } else {
-          busted <- busted + 1
-          hand_scores_chr <- c("0", "0", "0")
-
-        }
-
-        # add chr darts to each dart vector
-        for (i in seq_along(hand_scores_chr)){
-
-          sentence <- switch(i,
-                             "1" = "first_dart <- c(first_dart, hand_scores_chr[1])",
-                             "2" = "second_dart <- c(second_dart, hand_scores_chr[2])",
-                             "3" = "third_dart <- c(third_dart, hand_scores_chr[3])"
-          )
-          eval(parse(text = sentence))
-        }
-
-        # add chr darts to thrown dart score
-        thrown_darts_score <- c(thrown_darts_score, hand_scores_chr)
-
-        # count number of darts
-        n_of_darts <- n_of_darts + length(hand_scores_chr)
-
-
-      # checkout
-        if (score == 0){
-        checkout <- sum(hand_scores_num)
-        closing_double <- hand_scores_chr[length(hand_scores_chr)]
-        }
-
+      if (!all(all_of(hand_scores_chr %in% from_chr_to_score_names))) {message("Error: you have inserted unvalid values. Retry")}
     }
 
-    # cose importanti da return
-      res <- list("darts" = thrown_darts_score,
-                  "1st dart" = first_dart,
-                  "2nd dart" = second_dart,
-                  "3rd dart" = third_dart,
-                  "number of darts" = n_of_darts,
-                  "180" = `180`,
-                  "140+" = `140+`,
-                  "100+" = `100+`,
-                  "checkout" = checkout,
-                  "closing double" = closing_double,
-                  "missed doubles" = missed_doubles,
-                  "missed" = missed,
-                  "busted" = busted
-                  )
+    # subtract darts score from score and evaluating if miss double for checkout or bust
+    score_i <- score
+    for (i in seq_along(hand_scores_num)){
+      if(score_i %in% doubles & (score_i - hand_scores_num[i]) !=0 ) {
+        missed <- missed + 1
+      }
 
-      cat("Congratulations!", paste("You've completed the leg in", n_of_darts, "darts, with a", checkout, "checkout"), sep = "\n")
-      return(res)
+      score_i <- score_i -  hand_scores_num[i]
+    }
 
+    if (score -  sum(hand_scores_num) != 1 & (score -  sum(hand_scores_num)) >= 0){
+      score <- score -  sum(hand_scores_num)
+
+      if (sum(hand_scores_num) == 180){
+        plus180 <- plus180 + 1
+      } else if (sum(hand_scores_num) >= 140){
+        plus140 <- plus140 + 1
+      } else if (sum(hand_scores_num) >= 100){
+        plus100 <- plus100 + 1
+      } else if (sum(hand_scores_num >= 60)){
+        plus60 <- plus60 + 1
+      }
+
+    } else {
+      hand_scores_chr <- c("0", "0", "0")
+    }
+
+    # add chr darts to thrown dart score
+    thrown_darts_score <- c(thrown_darts_score, hand_scores_chr)
+
+    # count number of darts
+    n_of_darts <- n_of_darts + length(hand_scores_chr)
+
+    # checkout
+    if (score == 0){
+      checkout <- sum(hand_scores_num)
+      next
+    }
+
+
+
+  }
+
+  # count 18, 19, 20, 54, 57, 60
+    n18 <- length(which(thrown_darts_score == "18"))
+    n19 <- length(which(thrown_darts_score == "19"))
+    n20 <- length(which(thrown_darts_score == "20"))
+    n54 <- length(which(thrown_darts_score == "t18"))
+    n57 <- length(which(thrown_darts_score == "t19"))
+    n60 <- length(which(thrown_darts_score == "t20"))
+
+  # darts means
+    hand_dart_num <- rep(c(1, 2, 3), ceiling(length(thrown_darts_score)/3))[1:length(thrown_darts_score)]
+
+    darts.df <- data.frame("dart.hand" = hand_dart_num,
+                              "score" = as.numeric(from_chr_to_score_vector[c(thrown_darts_score)]))
+
+    means <- darts.df %>%
+      group_by(dart.hand) %>%
+      summarize(mean = round(mean(score), 2))
+
+    mean.1 <- means$mean[means$dart.hand == 1]
+    mean.2 <- means$mean[means$dart.hand == 2]
+    mean.3 <- means$mean[means$dart.hand == 3]
+
+  # df
+    res <- data.frame(
+      year = year(Sys.Date()),
+      month = month(Sys.Date()),
+      day = day(Sys.Date()),
+      n.darts = n_of_darts,
+      mean.3darts = round(501/n_of_darts*3, 2),
+      mean.first9 = round(mean( as.numeric(from_chr_to_score_vector[c(thrown_darts_score)])[1:9]), 2),
+      mean.1st = mean.1,
+      mean.2nd = mean.2,
+      mean.3d = mean.3,
+      checkout = checkout,
+      n.missed = missed,
+      checkout.rate = 1/(missed + 1)*100,
+      n.60plus = plus60,
+      n.100plus = plus100,
+      n.140plus = plus140,
+      n.180 = plus180,
+      n.18 = n18,
+      n.19 = n19,
+      n.20 = n20,
+      n.54 = n54,
+      n.57 = n57,
+      n.60 = n60
+    )
+
+    # save
+    filename <- "trleg.csv"
+    opened_df <- read.csv(file = filename)
+
+
+    names(opened_df) <- names(res)
+    opened_df <- rbind(opened_df, res)
+    write.csv(x = opened_df, file = filename, row.names = F)
+
+
+  cat("\n","Training completed! Check out the results", "\n")
+  return(res)
 }

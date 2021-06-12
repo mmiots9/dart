@@ -61,28 +61,28 @@ training <- function(save_dir = NA){
 
       # training function launch
       if (training_list_complete[game_2_play] == "round the clock 3 darts") {
-        cat("Round the clock 3 darts: singles", "\n", "Game on!")
+        cat("Round the clock 3 darts: singles", "\n", "Game on!", "\n")
         g <- round_clock_3darts("s")
         tr.df$rc3.s <- g$precision
-        cat("Round the clock 3 darts: doubles", "\n", "Game on!")
+        cat("Round the clock 3 darts: doubles", "\n", "Game on!", "\n")
         g <- round_clock_3darts("d")
         tr.df$rc3.d <- g$precision
-        cat("Round the clock 3 darts: trebles", "\n", "Game on!")
+        cat("Round the clock 3 darts: trebles", "\n", "Game on!", "\n")
         g <- round_clock_3darts("t")
         tr.df$rc3.t <- g$precision
 
         training_list_complete <- training_list_complete[-game_2_play]
         next}
       if (training_list_complete[game_2_play] == "around the clock"){
-        cat("Around the clock: singles", "\n", "Game on!")
+        cat("Around the clock: singles", "\n", "Game on!", "\n")
         g <- around_the_clock("s")
         tr.df$ac.s <- g$precision
         tot.as <- g$tot.darts
-        cat("Around the clock: doubles", "\n", "Game on!")
+        cat("Around the clock: doubles", "\n", "Game on!", "\n")
         g <- around_the_clock("d")
         tr.df$ac.d <- g$precision
         tot.ad <- g$tot.darts
-        cat("Around the clock: trebles", "\n", "Game on!")
+        cat("Around the clock: trebles", "\n", "Game on!", "\n")
         g <- around_the_clock("t")
         tr.df$ac.t <- g$precision
         tot.at <- g$tot.darts
@@ -90,13 +90,13 @@ training <- function(save_dir = NA){
 
         next}
       if (training_list_complete[game_2_play] == "high scores"){
-        cat("High scores: 20", "\n", "Game on!")
+        cat("High scores: 20", "\n", "Game on!", "\n")
         g <- high_scores(20)
         tr.df$hc.20 <- g$precision
-        cat("High scores: 19", "\n", "Game on!")
+        cat("High scores: 19", "\n", "Game on!", "\n")
         g <- high_scores(19)
         tr.df$hs.19 <- g$precision
-        cat("High scores: 18", "\n", "Game on!")
+        cat("High scores: 18", "\n", "Game on!", "\n")
         g <- high_scores(18)
         tr.df$hs.18 <- g$precision
         training_list_complete <- training_list_complete[-game_2_play]
@@ -105,21 +105,21 @@ training <- function(save_dir = NA){
         level_2_play <- menu(levels_closing, title = "Which level are you in?")
 
         if (levels_closing[level_2_play] == "beginner") {
-          cat("Closing in 3 darts: beginner", "\n", "Game on!")
+          cat("Closing in 3 darts: beginner", "\n", "Game on!", "\n")
           g <- closing_3("beginner")
           tr.df$cl3.b <- g$precision
           training_list_complete <- training_list_complete[-game_2_play]
           next
         }
         if (levels_closing[level_2_play] == "intermediate") {
-          cat("Closing in 3 darts: intermediate", "\n", "Game on!")
+          cat("Closing in 3 darts: intermediate", "\n", "Game on!", "\n")
           g <- closing_3("intermediate")
           tr.df$cl3.i <- g$precision
           training_list_complete <- training_list_complete[-game_2_play]
           next
         }
         if (levels_closing[level_2_play] == "advanced") {
-          cat("Closing in 3 darts: advanced", "\n", "Game on!")
+          cat("Closing in 3 darts: advanced", "\n", "Game on!", "\n")
           g <- closing_3("advanced")
           tr.df$cl3.a <- g$precision
           training_list_complete <- training_list_complete[-game_2_play]
@@ -131,7 +131,7 @@ training <- function(save_dir = NA){
         level_2_play <- menu(levels_closing, title = "Which level are you in?")
 
         if (levels_closing[level_2_play] == "beginner") {
-          cat("Closing in 6 darts: beginner", "\n", "Game on!")
+          cat("Closing in 6 darts: beginner", "\n", "Game on!", "\n")
           g <- closing_6("beginner")
           tr.df$cl6.b <- g$precision
           tot.cl6b <- g$tot.closed.3
@@ -139,7 +139,7 @@ training <- function(save_dir = NA){
           next
         }
         if (levels_closing[level_2_play] == "intermediate") {
-          cat("Closing in 6 darts: intermediate", "\n", "Game on!")
+          cat("Closing in 6 darts: intermediate", "\n", "Game on!", "\n")
           g <- closing_6("intermediate")
           tr.df$cl6.i <- g$precision
           tot.cl6i <- g$tot.closed.3
@@ -147,7 +147,7 @@ training <- function(save_dir = NA){
           next
         }
         if (levels_closing[level_2_play] == "advanced") {
-          cat("Closing in 6 darts: advanced", "\n", "Game on!")
+          cat("Closing in 6 darts: advanced", "\n", "Game on!", "\n")
           g <- closing_6("advanced")
           tr.df$cl6.a <- g$precision
           tot.cl6a <- g$tot.closed.3
@@ -163,7 +163,7 @@ training <- function(save_dir = NA){
   end_time <- Sys.time()
   tr.df$time <- parse_time(as.character(difftime(end_time, begin_time, "sec")), "%S")
 
-  cat("Training completed! Check out the results")
+  cat("Training completed! Check out the results", "\n")
 
   # df.result
     # create vector of multiplied precisions

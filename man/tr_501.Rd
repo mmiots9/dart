@@ -6,22 +6,6 @@
 \usage{
 tr_501()
 }
-\value{
-A list containing:
-\item{darts}{character vector of all the scores of the thrown darts}
-\item{1st dart}{character vector of all the scores of the first thrown darts}
-\item{2nd dart}{character vector of all the scores of the second thrown darts}
-\item{3rd dart}{character vector of all the scores of the third thrown darts}
-\item{number of darts}{number of thrown darts}
-\item{180}{number of 180s}
-\item{140+}{number of 140+}
-\item{100+}{number of 100+}
-\item{checkout}{checkout score}
-\item{closing double}{double that closed the leg}
-\item{missed doubles}{number of missed doubles}
-\item{missed}{character vector of all missed doubles}
-\item{busted}{number of busted}
-}
 \description{
 This function is used as calculator for a single 501 leg
 }
