@@ -133,7 +133,7 @@ tr_501 <- function(){
       mean.3d = mean.3,
       checkout = checkout,
       n.missed = missed,
-      checkout.rate = 1/(missed + 1)*100,
+      checkout.rate = round(1/(missed + 1)*100, 2),
       n.60plus = plus60,
       n.100plus = plus100,
       n.140plus = plus140,
