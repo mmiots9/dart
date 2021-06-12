@@ -12,6 +12,8 @@
 tr_501 <- function(){
 
   if(!("trleg.csv" %in% list.files())){
+  cat("Select training result folder", "\n")
+  Sys.sleep(1.5)
   save_dir <- dlg_dir()$res
   setwd(save_dir)
   }
