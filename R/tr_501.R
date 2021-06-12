@@ -127,7 +127,7 @@ tr_501 <- function(){
       day = day(Sys.Date()),
       n.darts = n_of_darts,
       mean.3darts = round(501/n_of_darts*3, 2),
-      mean.first9 = round(mean( as.numeric(from_chr_to_score_vector[c(thrown_darts_score)])[1:9]), 2),
+      mean.first9 = round(mean( as.numeric(from_chr_to_score_vector[c(thrown_darts_score)])[1:9]), 2)*3,
       mean.1st = mean.1,
       mean.2nd = mean.2,
       mean.3d = mean.3,
