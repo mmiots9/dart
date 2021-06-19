@@ -48,7 +48,7 @@ high_scores <- function(sector = 20){
   }
 
   scores.df <- scores.df %>%
-    mutate("tot.darts" = how_many_tot, "precision" = round(how_many_tot/30*100),2)
+    mutate("tot.darts" = how_many_tot, "precision" = round(how_many_tot/30*100, 2))
 
   # change df colnames
   colnames(scores.df) <- c("year", "month", "day", as.character(1:10), "tot.darts", "precision")
