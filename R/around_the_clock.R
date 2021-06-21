@@ -54,7 +54,7 @@ around_the_clock <- function(section = "s"){
 
     scores.df <- scores.df %>%
       mutate("tot.darts" = how_many_tot) %>%
-      mutate("precision" = round(length(possible_scores)/how_many_tot*100),2)
+      mutate("precision" = round(length(possible_scores)/how_many_tot*100, 2))
 
    # change df colnames
    colnames(scores.df) <- c("year", "month", "day", possible_scores, "tot.darts", "precision")

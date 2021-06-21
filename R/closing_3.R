@@ -54,7 +54,7 @@ closing_3 <- function(level = "beginner"){
 
   scores.df <- scores.df %>%
     mutate("tot.closed" = tot_closed) %>%
-    mutate("precision" = round(tot_closed/20*100),2)
+    mutate("precision" = round(tot_closed/20*100, 2))
 
   # change df colnames
   colnames(scores.df) <- c("year", "month", "day", as.character(1:10), "tot.closed", "precision")
