@@ -20,6 +20,7 @@ training <- function(save_dir = NA){
   training_list_complete <- c("round the clock 3 darts", "around the clock", "high scores", "closing 3 darts", "closing 6 darts", "end the training")
   game_2_play <- 0
   levels_closing <- c("beginner", "intermediate", "advanced")
+  tot.as <- tot.ad <- tot.at <- tot.cl6b <- tot.cl6i <- tot.cl6a <- 0
 
   # df
   tr.df <- data.frame(

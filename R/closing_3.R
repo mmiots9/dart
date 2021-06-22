@@ -57,7 +57,7 @@ closing_3 <- function(level = "beginner"){
     mutate("precision" = round(tot_closed/20*100, 2))
 
   # change df colnames
-  colnames(scores.df) <- c("year", "month", "day", as.character(1:10), "tot.closed", "precision")
+  colnames(scores.df) <- c("year", "month", "day", as.character(1:20), "tot.closed", "precision")
   filename <- paste("closing_3_", level,".csv", sep = "")
   opened_df <- read.csv(file = filename)
 
