@@ -34,9 +34,9 @@ training <- function(save_dir = NA){
     ac.s = NA,
     ac.d = NA,
     ac.t = NA,
-    hc.18 = NA,
-    hc.19 = NA,
-    hc.20 = NA,
+    hs.18 = NA,
+    hs.19 = NA,
+    hs.20 = NA,
     cl3.b = NA,
     cl3.i = NA,
     cl3.a = NA,
@@ -93,7 +93,7 @@ training <- function(save_dir = NA){
       if (training_list_complete[game_2_play] == "high scores"){
         cat("High scores: 20", "\n", "Game on!", "\n")
         g <- high_scores(20)
-        tr.df$hc.20 <- g$precision
+        tr.df$hs.20 <- g$precision
         cat("High scores: 19", "\n", "Game on!", "\n")
         g <- high_scores(19)
         tr.df$hs.19 <- g$precision
