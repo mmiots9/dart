@@ -11,7 +11,10 @@
 #'
 #' @export
 training <- function(save_dir = NA){
-  if (is.na(save_dir)){save_dir <- dlg_dir()$res}
+  if (is.na(save_dir)){
+    cat("Select training result folder", "\n")
+    Sys.sleep(1.0)
+    save_dir <- dlg_dir()$res}
   setwd(save_dir)
 
   # useful values
@@ -56,6 +59,7 @@ training <- function(save_dir = NA){
     # which training?
       title_dlg <- "Which game do you want to play?"
       game_2_play <- menu(training_list_complete, title = title_dlg)
+      Sys.sleep(0.5)
 
       # vedere se è la fine
       if (training_list_complete[game_2_play] == "end the training") {end_tr <- 1; next}
@@ -65,42 +69,52 @@ training <- function(save_dir = NA){
         cat("Round the clock 3 darts: singles", "\n", "Game on!", "\n")
         g <- round_clock_3darts("s")
         tr.df$rc3.s <- g$precision
+        Sys.sleep(0.5)
         cat("Round the clock 3 darts: doubles", "\n", "Game on!", "\n")
         g <- round_clock_3darts("d")
         tr.df$rc3.d <- g$precision
+        Sys.sleep(0.5)
         cat("Round the clock 3 darts: trebles", "\n", "Game on!", "\n")
         g <- round_clock_3darts("t")
         tr.df$rc3.t <- g$precision
 
         training_list_complete <- training_list_complete[-game_2_play]
+        Sys.sleep(0.5)
         next}
       if (training_list_complete[game_2_play] == "around the clock"){
         cat("Around the clock: singles", "\n", "Game on!", "\n")
         g <- around_the_clock("s")
         tr.df$ac.s <- g$precision
         tot.as <- g$tot.darts
+        Sys.sleep(0.5)
         cat("Around the clock: doubles", "\n", "Game on!", "\n")
         g <- around_the_clock("d")
         tr.df$ac.d <- g$precision
         tot.ad <- g$tot.darts
+        Sys.sleep(0.5)
         cat("Around the clock: trebles", "\n", "Game on!", "\n")
         g <- around_the_clock("t")
         tr.df$ac.t <- g$precision
         tot.at <- g$tot.darts
         training_list_complete <- training_list_complete[-game_2_play]
 
+        Sys.sleep(0.5)
         next}
       if (training_list_complete[game_2_play] == "high scores"){
         cat("High scores: 20", "\n", "Game on!", "\n")
         g <- high_scores(20)
         tr.df$hs.20 <- g$precision
+        Sys.sleep(0.5)
         cat("High scores: 19", "\n", "Game on!", "\n")
         g <- high_scores(19)
         tr.df$hs.19 <- g$precision
+        Sys.sleep(0.5)
         cat("High scores: 18", "\n", "Game on!", "\n")
         g <- high_scores(18)
         tr.df$hs.18 <- g$precision
+
         training_list_complete <- training_list_complete[-game_2_play]
+        Sys.sleep(0.5)
         next}
       if (training_list_complete[game_2_play] == "closing 3 darts") {
         level_2_play <- menu(levels_closing, title = "Which level are you in?")
@@ -110,6 +124,7 @@ training <- function(save_dir = NA){
           g <- closing_3("beginner")
           tr.df$cl3.b <- g$precision
           training_list_complete <- training_list_complete[-game_2_play]
+          Sys.sleep(0.5)
           next
         }
         if (levels_closing[level_2_play] == "intermediate") {
@@ -117,6 +132,7 @@ training <- function(save_dir = NA){
           g <- closing_3("intermediate")
           tr.df$cl3.i <- g$precision
           training_list_complete <- training_list_complete[-game_2_play]
+          Sys.sleep(0.5)
           next
         }
         if (levels_closing[level_2_play] == "advanced") {
@@ -124,6 +140,7 @@ training <- function(save_dir = NA){
           g <- closing_3("advanced")
           tr.df$cl3.a <- g$precision
           training_list_complete <- training_list_complete[-game_2_play]
+          Sys.sleep(0.5)
           next
         }
         next
@@ -137,6 +154,7 @@ training <- function(save_dir = NA){
           tr.df$cl6.b <- g$precision
           tot.cl6b <- g$tot.closed.3
           training_list_complete <- training_list_complete[-game_2_play]
+          Sys.sleep(0.5)
           next
         }
         if (levels_closing[level_2_play] == "intermediate") {
@@ -145,6 +163,7 @@ training <- function(save_dir = NA){
           tr.df$cl6.i <- g$precision
           tot.cl6i <- g$tot.closed.3
           training_list_complete <- training_list_complete[-game_2_play]
+          Sys.sleep(0.5)
           next
         }
         if (levels_closing[level_2_play] == "advanced") {
@@ -153,6 +172,7 @@ training <- function(save_dir = NA){
           tr.df$cl6.a <- g$precision
           tot.cl6a <- g$tot.closed.3
           training_list_complete <- training_list_complete[-game_2_play]
+          Sys.sleep(0.5)
           next
         }
         next

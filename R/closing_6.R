@@ -58,7 +58,7 @@ closing_6 <- function(level = "beginner"){
       while(!(scored %in% c("n", "y"))){
 
       form <- list(":TXT" = "y/n")
-      form_title <- paste("Did you close ", exit[i] , " in 6 darts?", sep ="")
+      form_title <- paste("Did you close ", exit_i , " in 6 darts?", sep ="")
       scored <- unlist(dlg_form(form, title = form_title)$res)
 
       if (!(scored %in% c("y", "n"))) {message('Error: you inserted an invalid value. Value shold be y or n.')}
@@ -77,7 +77,7 @@ closing_6 <- function(level = "beginner"){
   scores.df <- scores.df %>%
     mutate("tot.closed.3" = tot_closed_3) %>%
     mutate("tot.closed.6" = tot_closed_6) %>%
-    mutate("precision" = round( (tot_closed_3 + tot_closed_6))/(20 - tot_closed_3), 2)
+    mutate("precision" = round( (tot_closed_3 + tot_closed_6)/(20 - tot_closed_3), 2))
 
   # change df colnames
   colnames(scores.df) <- c("year", "month", "day", as.character(1:10), "tot.closed.3", "tot.closed.6", "precision")
