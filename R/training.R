@@ -188,7 +188,7 @@ training <- function(save_dir = NA){
 
   # df.result
     # create vector of multiplied precisions
-    var_prec <- as.numeric(subset(tr.df, select=rc3.s:hc.20))
+    var_prec <- as.numeric(subset(tr.df, select=rc3.s:hs.20))
     tot_darts_prec <- c(66, 63, 60, tot.as, tot.ad, tot.at, 30, 30, 30)
     tot_darts_prec <- tot_darts_prec[!is.na(var_prec)]
     var_prec <- as.numeric(na.omit(var_prec))
