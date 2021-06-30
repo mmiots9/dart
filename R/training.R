@@ -188,22 +188,31 @@ training <- function(save_dir = NA){
 
   # df.result
     # create vector of multiplied precisions
-    var_prec <- as.numeric(subset(tr.df, select=rc3.s:hs.20))
-    tot_darts_prec <- c(66, 63, 60, tot.as, tot.ad, tot.at, 30, 30, 30)
-    tot_darts_prec <- tot_darts_prec[!is.na(var_prec)]
-    var_prec <- as.numeric(na.omit(var_prec))
+      var_prec <- as.numeric(subset(tr.df, select=rc3.s:hs.20))
+      tot_darts_prec <- c(66, 63, 60, tot.as, tot.ad, tot.at, 30, 30, 30)
+      tot_darts_prec <- tot_darts_prec[!is.na(var_prec)]
+      var_prec <- as.numeric(na.omit(var_prec))
 
     tr.df$tot.prec <- round(sum(var_prec*tot_darts_prec)/sum(tot_darts_prec),2)
 
     # create vector of multiplied doubles
-    var_doub <- as.numeric(subset(tr.df, select=cl3.b:cl6.a))
-    tot_doub <- c(20, 20, 20, 20-tot.cl6b, 20-tot.cl6i, 20-tot.cl6a)
-    tot_doub <- tot_doub[!is.na(var_doub)]
-    var_doub <- as.numeric(na.omit(var_doub))
+      var_doub <- as.numeric(subset(tr.df, select=cl3.b:cl6.a))
+      tot_doub <- c(20, 20, 20, 20-tot.cl6b, 20-tot.cl6i, 20-tot.cl6a)
+      tot_doub <- tot_doub[!is.na(var_doub)]
+      var_doub <- as.numeric(na.omit(var_doub))
 
-    tr.df$tot.clos <- round(sum(var_doub*tot_doub)/sum(tot_doub),2)
+      tr.df$tot.clos <- round(sum(var_doub*tot_doub)/sum(tot_doub),2)
 
-    tr.df$tot <- round((tr.df$tot.clos*sum(tot_doub) + tr.df$tot.prec*sum(tot_darts_prec))/(sum(tot_doub) + sum(tot_darts_prec)),2)
+    # total
+      if (!is.na(tr.df$tot.clos) & !is.na(tr.df$tot.prec)) {
+        tr.df$tot <- round((tr.df$tot.clos*sum(tot_doub) + tr.df$tot.prec*sum(tot_darts_prec))/(sum(tot_doub) + sum(tot_darts_prec)), 2)
+      } else if (is.na(tr.df$tot.clos)) {
+        tr.df$tot <- tr.df$tot.prec
+      } else {
+        tr.df$tot <- tr.df$tot.clos
+      }
+
+
 
   # save
     opened_df <- read.csv(file = "trainings.csv")
