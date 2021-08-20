@@ -9,14 +9,6 @@
   )
 
   # methods
-    #' @export
-    setMethod(
-      "getPlayers",
-      "leg1p",
-      function(object){
-        object@player
-      }
-    )
 
   #' @export
   setMethod(
@@ -47,14 +39,7 @@
   )
 
   # Methods
-    #' @export
-      setMethod(
-        "getID",
-        "leg1p",
-        function(object){
-          object@id
-        }
-      )
+
 
     #' @export
       setMethod(
@@ -87,14 +72,7 @@
   )
 
   # Methods
-    #' @export
-      setMethod(
-        "getWin",
-        "leg1p",
-        function(object){
-          object@win
-        }
-      )
+
 
     #' @export
       setMethod(
@@ -125,6 +103,20 @@
 
         }
       )
+
+
+# getStats
+  #' @export
+  setGeneric(
+    "getStats",
+    valueClass = "list",
+    def = function(object){
+      standardGeneric("getStats")
+    }
+  )
+
+
+
 
 
 

@@ -58,6 +58,9 @@ m1 <- match1p(
 
 
 
+object <- leg1p(id = "m12312s1l1", player = "me", win = 1,
+            dartsScoresCh = c("t20", "t20", "t20", "t20", "t20", "t20", "t20", "t19", "d12"))
+
 
 
 
