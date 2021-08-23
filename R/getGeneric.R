@@ -116,7 +116,15 @@
   )
 
 
-
+# getDate
+  #' @export
+  setGeneric(
+    "getDate",
+    valueClass = "character",
+    def = function(object){
+      standardGeneric("getDate")
+    }
+  )
 
 
 

@@ -1,5 +1,5 @@
 # leg primo player
-l1 <- leg1p(id = "m12312s1l1", win = 1, player = "me", dartsScoresCh = "t20", dartsNumber = 12,
+l1 <- leg1p(id = "m20210612s1l1", win = 1, player = "me", dartsScoresCh = "t20", dartsNumber = 12,
             means = data.frame(c("3 darts ", "First 9 ", "1st dart", "2nd dart", "3rd dart"), c(1, 2, 1, 3, 3)),
             checkout = data.frame(c("Missed", "Busted", "Rate  "), c(1, 1, 0.33)),
             powerScoring = data.frame(c("54  ", "57  ", "60  ", "100+", "140+", "180+"), c(1, 1, 2, 2, 3, 3)))

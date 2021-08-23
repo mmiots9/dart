@@ -44,6 +44,24 @@
     }
   )
 
+  # getDate
+  #' @export
+  setMethod(
+    "getDate",
+    "leg1p",
+    function(object){
+      id <- getID(object)
+      datetime <- unlist(
+        strsplit(
+        unlist(strsplit(id, "s"))[1],
+        "m"))[2]
+      date <- paste(substr(datetime, 1, 4),
+                    substr(datetime, 5, 6),
+                    substr(datetime, 7, 8),
+                    sep = "-")
+    }
+  )
+
   # getStats
   #' @export
   setMethod(
