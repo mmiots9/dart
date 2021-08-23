@@ -92,12 +92,6 @@
                 missedDoubles <- c(missedDoubles, paste("d", scorePar/2, sep = ""))
               }
               scorePar <- scorePar -  handScoresVal[j]
-
-              # valuto se chiusura
-              if (scorePar == 0) {
-                closingDouble <- paste("d", handScoresVal[j]/2, sep = "")
-                nHit <- nHit + 1
-              }
             }
 
           # valuto se bust
@@ -109,10 +103,9 @@
                 plus140 <- plus140 + 1
               } else if (sum(handScoresVal) >= 100){
                 plus100 <- plus100 + 1
-              } else if (sum(hand_scores_num >= 60)){
+              } else if (sum(handScoresVal) >= 60){
                 plus60 <- plus60 + 1
               }
-
             } else {
               nBust <- nBust + 1
               handScoresVal <- c(0, 0, 0)
@@ -122,7 +115,7 @@
             scoreOv <- scoreOv - sum(handScoresVal)
             dartsScoresVal <- c(dartsScoresVal, handScoresVal)
 
-        }
+            }
 
 
       # tengo i valori ch buoni
@@ -137,12 +130,15 @@
         n57 <- sum(dartsScoresCh == "t19")
         n54 <- sum(dartsScoresCh == "t18")
 
-      # tolgo eventuali 0 dopo chiusura
+      # tolgo eventuali 0 dopo chiusura e aggiungo valori chiusura
         if (sum(dartsScoresVal) == 501) {
           for (i in 1:2) {
             if (dartsScoresVal[length(dartsScoresVal)] == 0) {
               dartsScoresVal <- dartsScoresVal[-c(length(dartsScoresVal))]
             }
+
+          nHit <- 1
+          closingDouble <- paste0("d", dartsScoresVal[length(dartsScoresVal)])
           }
         }
 
@@ -169,7 +165,7 @@
         )
 
         # checkout
-        if (nHit == 0) {rate <- 0} else if (nMiss + nBust == 0) {rate <- 1} else {rate <- round(nHit/nMiss, 2)}
+        if (nHit == 0) {rate <- 0} else if (nMiss + nBust == 0) {rate <- 1} else {rate <- round(nHit/(nMiss+1), 2)}
         checkoutDf <- data.frame(
           what  = c("Missed", "Busted", "Hit", "Rate"),
           value = c(nMiss, nBust, nHit, rate)
@@ -184,7 +180,13 @@
             mutate(hit = 0)
 
           if (closingDouble != 0) {
-            doublesDf$hit[which(doublesDf$double == closingDouble)] <- doublesDf$hit[which(doublesDf$double == closingDouble)] + 1
+            if (closingDouble %in% missedDoubles) {
+              doublesDf$hit[which(doublesDf$double == closingDouble)] <- doublesDf$hit[which(doublesDf$double == closingDouble)] + 1
+            } else {
+              tmpdf <- data.frame(double = closingDouble, miss = 0, hit = 1)
+              doublesDf <- rbind(doublesDf, tmpdf)
+            }
+
           }
         } else {
           if (closingDouble != 0) {
@@ -193,6 +195,11 @@
             doublesDf <- data.frame(double = character(), miss = numeric(), hit = numeric())
           }
         }
+        doublesDf$double <- factor(doublesDf$double, levels = c(paste("d", c(1:20), sep = "")), ordered = T)
+        doublesDf <- doublesDf %>%
+          arrange(double)
+
+        attr(doublesDf, "class") <- c("data.frame")
 
         # power scoring
         powerDf <- data.frame(
@@ -218,7 +225,7 @@
     "show",
     "leg1p",
     function(object){
-      cat("Date:", "\n")
+      cat("Date:", getDate(object), "\n")
       cat("Player:", getPlayers(object), "\n", "\n")
       if (object@win == 1) {
         cat("Leg closed in", getStats(object)$dartsNum, "darts \n")

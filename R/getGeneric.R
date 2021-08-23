@@ -10,14 +10,7 @@
 
   # methods
 
-  #' @export
-  setMethod(
-    "getPlayers",
-    "set1p",
-    function(object){
-      getPlayers(object@legs[[1]])
-    }
-  )
+
 
   #' @export
   setMethod(
@@ -41,15 +34,7 @@
   # Methods
 
 
-    #' @export
-      setMethod(
-        "getID",
-        "set1p",
-        function(object){
-          id <- getID(object@legs[[1]])
-          strsplit(id, "l")[[1]][1]
-        }
-      )
+
 
     #' @export
     setMethod(
@@ -74,20 +59,7 @@
   # Methods
 
 
-    #' @export
-      setMethod(
-        "getWin",
-        "set1p",
-        function(object){
-          wins <- 0
-          for (i in 1:length(object@legs)) {
-            wins <- wins + getWin(object@legs[[i]])
-          }
 
-          if (wins > (length(object@legs)/2)) {return(1)} else {return(0)}
-
-        }
-      )
 
     #' @export
       setMethod(
