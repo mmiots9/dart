@@ -2,7 +2,7 @@
 l1 <- leg1p(id = "m20210612s1l1",
             win = 0,
             player = "me",
-            dartsScoresCh = c("t20", "20",  "1",   "5",   "5",  "20",  "t19", "19",  "19", "t19", "t19", "t19", "t20", "20", "20", "12", "2", "5", "1", "d2", "NA"))
+            dartsScoresCh = c("t20", "20",  "1",   "5",   "5",  "20",  "t19", "19",  "19", "t19", "t19", "t19", "t20", "20", "20", "12", "2", "5", "1", "2", "NA"))
 
 
 l2 <- leg1p(id = "m20210612s1l2",
@@ -11,69 +11,64 @@ l2 <- leg1p(id = "m20210612s1l2",
             dartsScoresCh = c("t20", "t20", "20", "1", "1", "5", "t20", "t20", "20", "t19", "t19", "t20", "20", "10", "t20", "d5", "d5", "d10")
               )
 
+l3 <- leg1p(id = "m20210612s1l1",
+            win = 0,
+            player = "me",
+            dartsScoresCh = c("t20", "t20",  "5",   "1",   "1",  "t20",  "t19", "19",  "7", "19", "t19", "t19", "t20", "20", "20"))
+
 s1 <- set1p(
   win = 0,
-  legs = list(l1, l2)
+  legs = list(l1, l2, l3)
 )
 
+l4 <- leg1p(id = "m20210612s1l1",
+            win = 0,
+            player = "me",
+            dartsScoresCh = c("t20", "20",  "1",   "5",   "5",  "20",  "t19", "19",  "19", "t19", "t19", "t19", "t20", "20", "20", "12", "2", "5", "1", "2", "NA"))
 
 
-
-
-l3 <- leg1p(id = "m12312s2l1", win = 1, player = "me", dartsScoresCh = "t20", dartsNumber = 2,
-            means = data.frame(c("3 darts ", "First 9 ", "1st dart", "2nd dart", "3rd dart"), c(1, 2, 1, 3, 3)),
-            checkout = data.frame(c("Missed", "Busted", "Rate  "), c(1, 1, 0.33)),
-            powerScoring = data.frame(c("54  ", "57  ", "60  ", "100+", "140+", "180+"), c(1, 1, 2, 2, 3, 3)))
-
-
-l4 <- leg1p(id = "m12312s2l2", win = 1, player = "me", dartsScoresCh = "t20, d20",
-            dartsNumber = 1,
-            means = data.frame(c("3 darts ", "First 9 ", "1st dart", "2nd dart", "3rd dart"), c(1, 1, 4, 3, 4)),
-            checkout = data.frame(c("Missed", "Busted", "Rate  "), c(1, 2, 0.00)),
-            powerScoring = data.frame(c("54  ", "57  ", "60  ", "100+", "140+", "180+"), c(2, 1, 1, 2, 3, 3)))
-
-# set primo player
-s1 <- set1p(
-  win = 1
-  legs = list(l1 = l1, l2 = l2),
+l5 <- leg1p(id = "m20210612s1l2",
+            win = 1,
+            player = "me",
+            dartsScoresCh = c("t20", "t20", "20", "1", "1", "5", "t20", "t20", "20", "t19", "t19", "t20", "20", "10", "t20", "d5", "d5", "d10")
 )
+
+l6 <- leg1p(id = "m20210612s1l1",
+            win = 1,
+            player = "me",
+            dartsScoresCh = c("t20", "t20",  "5",   "1",   "1",  "t20",  "t19", "19",  "7", "19", "t19", "t19", "t20", "20", "d9"))
 
 s2 <- set1p(
-  legs = list(l1 = l3, l2 = l4),
-  dartsScoresCh = "t20, t20, d20",
-  dartsNumber = 3,
-  means = data.frame(c("3 darts ", "First 9 ", "1st dart", "2nd dart", "3rd dart"), c(1, 1, 4, 3, 4)),
-  checkout = data.frame(c("Missed", "Busted", "Rate  "), c(1, 2, 0.00)),
-  powerScoring = data.frame(c("54  ", "57  ", "60  ", "100+", "140+", "180+"), c(2, 1, 1, 2, 3, 3))
-
+  win = 1,
+  legs = list(l4, l5, l6)
 )
 
-# match primo player
+l7 <- leg1p(id = "m20210612s1l1",
+            win = 0,
+            player = "me",
+            dartsScoresCh = c("t20", "20",  "1",   "5",   "5",  "20",  "t19", "19",  "19", "t19", "t19", "t19", "t20", "20", "20", "12", "2", "5", "1", "2", "NA"))
+
+
+l8 <- leg1p(id = "m20210612s1l2",
+            win = 1,
+            player = "me",
+            dartsScoresCh = c("t20", "t20", "20", "1", "1", "5", "t20", "t20", "20", "t19", "t19", "t20", "20", "10", "t20", "d5", "d15", "NA")
+)
+
+l9 <- leg1p(id = "m20210612s1l1",
+            win = 1,
+            player = "me",
+            dartsScoresCh = c("t20", "t20",  "5",   "1",   "1",  "t20",  "t19", "19",  "7", "19", "t19", "t19", "t20", "d19", "NA"))
+
+s3 <- set1p(
+  win = 1,
+  legs = list(l7, l8, l9)
+)
+
 m1 <- match1p(
-  sets = list(s1 = s1, s2 = s2),
-  dartsScoresCh = "t20, 20, d20",
-  dartsNumber = 15,
-  means = data.frame(c("3 darts ", "First 9 ", "1st dart", "2nd dart", "3rd dart"), c(1, 1, 4, 3, 4)),
-  checkout = data.frame(c("Missed", "Busted", "Rate  "), c(1, 2, 0.00)),
-  powerScoring = data.frame(c("54  ", "57  ", "60  ", "100+", "140+", "180+"), c(2, 1, 1, 2, 3, 3))
-
+  win = 1,
+  sets = list(s1, s2, s3)
 )
-
-
-
-
-object <- leg1p(id = "m12312s1l1", player = "me", win = 1,
-            dartsScoresCh = c("t20", "t20", "t20", "t20", "t20", "t20", "t20", "t19", "d12"))
-
-
-
-
-
-rbind(getStats(l1)$doubles, getStats(l2)$doubles) %>%
-  group_by(double) %>%
-  summarise(miss = sum(miss), hit = sum(hit))
-
-
 
 
 

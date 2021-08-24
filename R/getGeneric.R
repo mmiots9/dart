@@ -8,18 +8,6 @@
     }
   )
 
-  # methods
-
-
-
-  #' @export
-  setMethod(
-    "getPlayers",
-    "match1p",
-    function(object){
-      getPlayers(object@sets[[1]])
-    }
-  )
 
 # getID
   #' @export
@@ -31,20 +19,6 @@
     }
   )
 
-  # Methods
-
-
-
-
-    #' @export
-    setMethod(
-      "getID",
-      "match1p",
-      function(object){
-        id <- getID(object@sets[[1]])
-        strsplit(id, "s")[[1]][1]
-      }
-    )
 
 # getWin
   #' @export
@@ -55,26 +29,6 @@
       standardGeneric("getWin")
     }
   )
-
-  # Methods
-
-
-
-
-    #' @export
-      setMethod(
-        "getWin",
-        "match1p",
-        function(object){
-          wins <- 0
-          for (i in 1:length(object@sets)) {
-            wins <- wins + getWin(object@sets[[i]])
-          }
-
-          if (wins > (length(object@sets)/2)) {return(1)} else {return(0)}
-
-        }
-      )
 
 
 # getStats

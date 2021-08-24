@@ -74,12 +74,16 @@
           ndartst <- mean3t <- 0
           n1dt <- n2dt <- n3dt <- mean1t <- mean2t <- mean3rdt <- 0
           mf9 <- NULL
+          lost <- won <- 0
 
       # ciclo per ognuna
           for (i in 1:length(object@legs)) {
 
             # salvo stats
             stats <- getStats(object@legs[[i]])
+
+            # aggiungo vinti o persi
+            if (object@legs[[i]]@win == 1){won <- won + 1} else {lost <- lost + 1}
 
             # power
             # prendo la seconda colonna, unisco a quelle altre e poi rowSums
@@ -150,6 +154,9 @@
 
         attr(doublesDfi, "class") <- c("data.frame")
 
+      # dataset legs
+        legsDf <- data.frame(won, lost)
+
         # final list
 
         stats = list(
@@ -157,7 +164,8 @@
           checkout = scheckouDf,
           doubles  = doublesDfi,
           power    = spowerDf,
-          dartsNum = ndartst
+          dartsNum = ndartst,
+          legs     = legsDf
         )
 
 
@@ -171,15 +179,17 @@
     "show",
     "set1p",
     function(object){
-      cat("Date:", getID(object), "\n")
+      stats <- getStats(object)
+
+      cat("Date:", getDate(object), "\n")
       cat("Player:", getPlayers(object), "\n")
       if (getWin(object) == 1) {
-        cat("Winner: yes", "\n", "\n")
+        win <- "won"
       } else {
-        cat("Winner: no", "\n", "\n")
+        win <- "lost"
       }
-      cat("Set closed with an avarage of",
-          getStats(object)$mean[which(getStats(object)$mean[,1] == "3 darts"), 2], " \n")
+      cat("Set ", win, " ", stats$legs$won, "-", stats$legs$lost," with an avarage of ",
+          getStats(object)$mean[which(getStats(object)$mean[,1] == "3 darts"), 2], " \n", sep = "")
     }
   )
 
@@ -191,7 +201,7 @@
 
       # creazione vettori chr
       meansCh <- c("3 darts ", "First 9 ", "1st dart", "2nd dart", "3rd dart")
-      checkoutCh <- c("Missed", "Busted", "Rate  ")
+      checkoutCh <- c("Missed", "Busted", "Hit   ","Rate  ")
       powerCh <- c("54  ", "57  ", "60  ", "60+ ", "100+", "140+", "180+")
 
       # creazione vettori valori
@@ -220,10 +230,12 @@
       # print out
       cat("Player:", getPlayers(object), "\n")
       if (object@win == 1) {
-        cat("Winner: yes", "\n", "\n")
+        cat("Winner: yes", "\n")
       } else {
-        cat("Winner: no", "\n", "\n")
+        cat("Winner: no", "\n")
       }
+      cat("Legs: ", stats$legs$won, "-", stats$legs$lost, "\n", "\n", sep = "")
+
       matr
     }
   )

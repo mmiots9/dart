@@ -138,7 +138,7 @@
             }
 
           nHit <- 1
-          closingDouble <- paste0("d", dartsScoresVal[length(dartsScoresVal)])
+          closingDouble <- paste0("d", dartsScoresVal[length(dartsScoresVal)]/2)
           }
         }
 
