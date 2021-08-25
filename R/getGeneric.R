@@ -52,7 +52,15 @@
     }
   )
 
-
+# getWinner
+  #' @export
+  setGeneric(
+    "getWinner",
+    valueClass = "character",
+    def = function(object){
+      standardGeneric("getWinner")
+    }
+  )
 
 
 

@@ -121,7 +121,7 @@ setMethod(
     }
 
     # ricreo dataset power
-    spowerDf <- data.frame(what = c("18", "19", "20", "54", "57", "60", "60+", "100+", "140+", "180"),
+    spowerDf <- data.frame(what = c("18", "19", "20", "54", "57", "60", "60+", "100+", "140+", "180 "),
                            n = rowSums(spowerDfi))
 
     # ricreo dataset checkout
@@ -202,7 +202,7 @@ setMethod(
     # creazione vettori chr
     meansCh <- c("3 darts ", "First 9 ", "1st dart", "2nd dart", "3rd dart")
     checkoutCh <- c("Missed", "Busted", "Rate  ")
-    powerCh <- c("54  ", "57  ", "60  ", "60+ ", "100+", "140+", "180+")
+    powerCh <- c("54  ", "57  ", "60  ", "60+ ", "100+", "140+", "180 ")
 
     # creazione vettori valori
     stats <- getStats(object)
@@ -239,3 +239,121 @@ setMethod(
     matr
   }
 )
+
+# ------------------------------------------------- match2p
+# match2p
+# class
+  #' @export match2p
+  #' @exportClass match2p
+  match2p <- setClass(
+    "match2p",
+    slots = list(
+      p1match = "match1p",
+      p2match = "match1p",
+      set2win = "numeric"
+    )
+  )
+
+# Methods
+  # getPlayers
+  #' @export
+  setMethod(
+    "getPlayers",
+    "match2p",
+    function(object){
+      players <- c(getPlayers(object@p1match), getPlayers(object@p2match))
+    }
+  )
+
+  # getDate
+  #' @export
+  setMethod(
+    "getDate",
+    "match2p",
+    function(object){
+      getDate(object@p1match)
+    }
+  )
+
+  # getID
+  #' @export
+  setMethod(
+    "getID",
+    "match2p",
+    function(object){
+      getID(object@p1match)
+    }
+  )
+
+  # getWinner
+  #' @export
+  setMethod(
+    "getWinner",
+    "match2p",
+    function(object){
+      if (getWin(object@p1match) == 1) {winner <- getPlayers(object@p1match)} else {winner <- getPlayers(object@p2match)}
+    }
+  )
+
+  # show
+  #' @export
+  setMethod(
+    "show",
+    "match2p",
+    function(object){
+
+      if (getWin(object@p1match) == 1) {
+        winnersets <- 0
+        losersets <- 0
+
+        for (i in 1:length(object@p1match@sets)) {
+          winnersets <- winnersets + getWin(object@p1match@sets[[i]])
+          losersets <- losersets + getWin(object@p2match@sets[[i]])
+        }
+
+      } else {
+        winnersets <- 0
+        losersets <- 0
+
+        for (i in 1:length(object@p1match@sets)) {
+          winnersets <- winnersets + getWin(object@p2match@sets[[i]])
+          losersets <- losersets + getWin(object@p1match@sets[[i]])
+        }
+      }
+
+      cat("Date:", getDate(object), "\n")
+      cat("Players:", paste(getPlayers(object), collapse = ", "), "\n", "\n")
+      cat("Set won by ", getWinner(object), " ", winnersets, "-", losersets, sep = "")
+
+    }
+  )
+
+  # summary
+  #' @export
+  setMethod(
+    "summary",
+    "match2p",
+    function(object){
+      p1stats <- getStats(object@p1match)
+      p2stats <- getStats(object@p2match)
+
+      # creo vettore centrale
+      center <- c("Sets", "MEAN", p1stats$mean[,1], "CHECKOUT", p1stats$checkout[,1], "POWER SCORING", p1stats$power[,1])
+      p1v    <- c(p1stats$sets$won, "", as.character(p1stats$mean[,2]),
+                  "", as.character(p1stats$checkout[,2]),
+                  "", as.character(p1stats$power[,2]))
+      p2v    <- c(p2stats$sets$won, "", as.character(p2stats$mean[,2]),
+                  "", as.character(p2stats$checkout[,2]),
+                  "", as.character(p2stats$power[,2]))
+
+      df <- data.frame(p1v, center, p2v)
+      colnames(df) <- c(getPlayers(object@p1match), "", getPlayers(object@p2match))
+      name.width <- max(sapply(names(df), nchar))
+      names(df) <- format(names(df), width = name.width, justify = "centre")
+      a <- format(df, justify = "centre")
+      print(a, row.names = F)
+
+
+
+    }
+  )

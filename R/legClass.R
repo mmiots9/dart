@@ -8,6 +8,7 @@
     slots = list(
       id = "character",
       player = "character",
+      start = "numeric",
       win = "numeric",
       dartsScoresCh = "character"
     )
@@ -203,7 +204,7 @@
 
         # power scoring
         powerDf <- data.frame(
-          what = c("18", "19", "20", "54", "57", "60", "60+", "100+", "140+", "180"),
+          what = c("18", "19", "20", "54", "57", "60", "60+", "100+", "140+", "180 "),
           n    = c(n18, n19, n20, n54, n57, n60, plus60, plus100, plus140, plus180)
         )
 
@@ -245,8 +246,8 @@
 
       # creazione vettori chr
       meansCh <- c("3 darts ", "First 9 ", "1st dart", "2nd dart", "3rd dart")
-      checkoutCh <- c("Missed", "Busted", "Rate  ")
-      powerCh <- c("54  ", "57  ", "60  ", "60+ " , "100+", "140+", "180+")
+      checkoutCh <- c("Missed", "Busted", "Hit   " , "Rate  ")
+      powerCh <- c("54  ", "57  ", "60  ", "60+ " , "100+", "140+", "180 ")
 
       # creazione vettori valori
       stats <- getStats(object)
@@ -281,4 +282,126 @@
       matr
     }
   )
+
+# ------------------------------------------------- leg2p
+
+# leg2p
+# class
+  #' @export leg2p
+  #' @exportClass leg2p
+  leg2p <- setClass(
+    "leg2p",
+    slots = list(
+      p1leg = "leg1p",
+      p2leg = "leg1p"
+    )
+  )
+
+# Methods
+
+  # getPlayers
+  #' @export
+  setMethod(
+    "getPlayers",
+    "leg2p",
+    function(object){
+      players <- c(getPlayers(object@p1leg), getPlayers(object@p2leg))
+    }
+  )
+
+  # getDate
+  #' @export
+  setMethod(
+    "getDate",
+    "leg2p",
+    function(object){
+      getDate(object@p1leg)
+    }
+  )
+
+  # getID
+  #' @export
+  setMethod(
+    "getID",
+    "leg2p",
+    function(object){
+      getID(object@p1leg)
+    }
+  )
+
+  # getWinner
+  #' @export
+  setMethod(
+    "getWinner",
+    "leg2p",
+    function(object){
+      if (getWin(object@p1leg) == 1) {winner <- getPlayers(object@p1leg)} else {winner <- getPlayers(object@p2leg)}
+    }
+  )
+
+  # show
+  #' @export
+  setMethod(
+    "show",
+    "leg2p",
+    function(object){
+
+      if (getWin(object@p1leg) == 1) {ndarts <- getStats(object@p1leg)$dartsNum} else {ndarts <- getStats(object@p1leg)$dartsNum}
+
+      cat("Date:", getDate(object), "\n")
+      cat("Players:", paste(getPlayers(object), collapse = ", "), "\n", "\n")
+      cat("Leg won by", getWinner(object), "in", ndarts, "darts")
+
+    }
+  )
+
+  # summary
+  #' @export
+  setMethod(
+    "summary",
+    "leg2p",
+    function(object){
+      p1stats <- getStats(object@p1leg)
+      p2stats <- getStats(object@p2leg)
+
+      # creo vettore centrale
+      center <- c("MEAN", p1stats$mean[,1], "CHECKOUT", p1stats$checkout[,1], "POWER SCORING", p1stats$power[,1])
+      p1v    <- c("", as.character(p1stats$mean[,2]),
+                  "", as.character(p1stats$checkout[,2]),
+                  "", as.character(p1stats$power[,2]))
+      p2v    <- c("", as.character(p2stats$mean[,2]),
+                  "", as.character(p2stats$checkout[,2]),
+                  "", as.character(p2stats$power[,2]))
+
+      df <- data.frame(p1v, center, p2v)
+      colnames(df) <- c(getPlayers(object@p1leg), "", getPlayers(object@p2leg))
+      name.width <- max(sapply(names(df), nchar))
+      names(df) <- format(names(df), width = name.width, justify = "centre")
+      a <- format(df, justify = "centre")
+      print(a, row.names = F)
+
+
+
+    }
+  )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
