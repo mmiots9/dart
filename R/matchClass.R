@@ -323,7 +323,7 @@ setMethod(
 
       cat("Date:", getDate(object), "\n")
       cat("Players:", paste(getPlayers(object), collapse = ", "), "\n", "\n")
-      cat("Set won by ", getWinner(object), " ", winnersets, "-", losersets, sep = "")
+      cat("Match won by ", getWinner(object), " ", winnersets, "-", losersets, sep = "")
 
     }
   )
