@@ -11,7 +11,7 @@
 #' @author Matteo Miotto
 #' @importFrom svDialogs dlg_form
 #' @importFrom stringr str_split
-#' @importFrom dplyr all_of mutate arrange group_by summarise full_join
+#' @importFrom dplyr all_of mutate arrange group_by summarise full_join summarize n
 #' @importFrom magrittr %>%
 #' @importFrom huxtable hux set_position set_align print_screen everywhere
 #' @export

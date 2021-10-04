@@ -173,7 +173,7 @@
         )
 
         # doubles
-        if (!is_null(missedDoubles)){
+        if (!is.null(missedDoubles)){
 
           doublesDf <- data.frame(double = missedDoubles) %>%
             group_by(double) %>%
