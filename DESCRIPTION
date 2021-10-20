@@ -20,5 +20,7 @@ Imports:
   ggforce,
   rmarkdown,
   lubridate,
-  readr
+  readr,
+  huxtable,
+  knitr
 RoxygenNote: 7.1.1
