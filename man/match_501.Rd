@@ -2,25 +2,27 @@
 % Please edit documentation in R/match_501.R
 \name{match_501}
 \alias{match_501}
-\title{Single 501 match}
+\title{501 match}
 \usage{
-match_501(player1, player2, sets2win = 1, nlegs = 1)
+match_501(player1, player2, sets2win = 1, legs2win = 1)
 }
 \arguments{
-\item{player1}{player1 name}
+\item{player1}{player1 name, he is the one who start in the first leg}
 
 \item{player2}{player2 name}
+
+\item{sets2win}{number of sets to win the match}
+
+\item{legs2win}{number of legs to win the set}
 }
 \value{
-A list containing:
-\item{match.stat}{match statistics}
-\item{sets.stat}{sets statistics}
-\item{player1.set.stat}{Set stats for player1}
-\item{player2.set.stat}{Set stats for player2}
-\item{legs.stat}{Legs statistics}
+A match2p object containing:
+\item{p1match}{A match1p class object for the 1st player}
+\item{p2match}{A match1p class object for the 2nd player}
+\item{set2win}{Number of sets to win the match}
 }
 \description{
-This function is used as calculator for a single 501 match
+This function is used as calculator for a 501 match
 }
 \author{
 Matteo Miotto

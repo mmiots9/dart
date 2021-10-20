@@ -1,15 +1,15 @@
 #' @name match_501
-#' @title Single 501 match
-#' @description This function is used as calculator for a single 501 match
-#' @usage match_501(player1, player2, sets2win = 1, nlegs = 1)
-#' @param player1 player1 name
+#' @title 501 match
+#' @description This function is used as calculator for a 501 match
+#' @usage match_501(player1, player2, sets2win = 1, legs2win = 1)
+#' @param player1 player1 name, he is the one who start in the first leg
 #' @param player2 player2 name
-#' @returns A list containing:
-#' \item{match.stat}{match statistics}
-#' \item{sets.stat}{sets statistics}
-#' \item{player1.set.stat}{Set stats for player1}
-#' \item{player2.set.stat}{Set stats for player2}
-#' \item{legs.stat}{Legs statistics}
+#' @param sets2win number of sets to win the match
+#' @param legs2win number of legs to win the set
+#' @returns A match2p object containing:
+#' \item{p1match}{A match1p class object for the 1st player}
+#' \item{p2match}{A match1p class object for the 2nd player}
+#' \item{set2win}{Number of sets to win the match}
 #' @author Matteo Miotto
 #' @importFrom svDialogs dlg_form
 #' @importFrom stringr str_split
