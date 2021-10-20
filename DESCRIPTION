@@ -21,5 +21,6 @@ Imports:
   rmarkdown,
   lubridate,
   readr,
-  huxtable
+  huxtable,
+  knitr
 RoxygenNote: 7.1.1
