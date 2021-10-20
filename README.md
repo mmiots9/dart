@@ -19,7 +19,7 @@ match_501(player1, player2, sets2win = n, legs2win = k)
 I strongly reccomend to store the result of the function in a variable, so that it is possible to get other features.
 To train yourself in a single 501 match, a new function will be available soon.
 
-<h3>get functions</h3>
+<h3><i>Get</i> functions</h3>
 There are a set of <i>get</i> functions that allow you to retrieve useful information about a match, a set or even a single leg.
 These functions are:
 <ul>
@@ -41,5 +41,5 @@ In this packages, 6 new S4 classes are used, each with its own methods for the g
 <li>match2p: two-players match</li>
 </ul>
 
-<h3>save and load match</h3>
+<h3>Save and Load match functions</h3>
 The functions <i>saveMatch</i> and <i>loadMatch</i> allow you to save and load a match into/from a text file.
