@@ -136,7 +136,7 @@ setMethod(
 
     # ricreo dataset means
     meanOv <- round(round(mean3t) / ndartst, 2)
-    mean9  <- round(mean(mf9), 2)
+    mean9  <- round(mean(mf9, na.rm = T), 2)
     mean.1 <- round(mean1t / n1dt, 2)
     mean.2 <- round(mean2t / n2dt, 2)
     mean.3 <- round(mean3rdt / n3dt, 2)
