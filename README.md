@@ -9,7 +9,7 @@ To install this package, you should run this code in R:
 devtools::install_github("mmiots9/mdarts")
 ```
 
-<h3>Play a match<//h3>
+<h3>Play a match</h3>
 To play a match, you have to run this code:
 
 ```
@@ -30,7 +30,7 @@ These functions are:
 <li>getDate: get the date of play</i>
 </ul>
 
-<h3>Classes</i>
+<h3>Classes</h3>
 In this packages, 6 new S4 classes are used, each with its own methods for the get functions and for generic <i>show</i> and <i>summary</i> functions:
 <ul>
 <li>leg1p: single-player leg</li>
