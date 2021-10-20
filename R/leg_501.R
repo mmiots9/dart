@@ -72,6 +72,8 @@ leg_501 <- function(player1, player2, df.print, nset, nleg) {
 
     for (i in seq_along(p1.handScoresVal)){
       p1.score_i <- p1.score_i - p1.handScoresVal[i]
+
+      # if bust
       if (p1.score_i == 1 |
           p1.score_i < 0 |
           (p1.score_i == 0 & !(p1.handScoresCh[i] %in% c(paste0("d", c(1:20)), "d25")))){
@@ -81,8 +83,10 @@ leg_501 <- function(player1, player2, df.print, nset, nleg) {
         if (i == 1){p1.handScoresCh[2:3] <- "NA"} else if (i == 2) {p1.handScoresCh[3] <- "NA"}
         message("No score\n")
         break
-
       }
+
+      # if close
+      if (p1.score_i == 0) {if (i == 1){p1.handScoresCh[2:3] <- "NA"} else if (i == 2) {p1.handScoresCh[3] <- "NA"}}
     }
 
     p1.score <- p1.score - sum(p1.handScoresVal)
@@ -133,6 +137,8 @@ leg_501 <- function(player1, player2, df.print, nset, nleg) {
 
     for (i in seq_along(p2.handScoresVal)){
       p2.score_i <- p2.score_i - p2.handScoresVal[i]
+
+      # if bust
       if (p2.score_i == 1 |
           p2.score_i < 0 |
           (p2.score_i == 0 & !(p2.handScoresCh[i] %in% c(paste0("d", c(1:20)), "d25")))){
@@ -143,6 +149,9 @@ leg_501 <- function(player1, player2, df.print, nset, nleg) {
         message("No score\n")
         break
       }
+
+      # if close
+      if (p1.score_i == 0) {if (i == 1){p1.handScoresCh[2:3] <- "NA"} else if (i == 2) {p1.handScoresCh[3] <- "NA"}}
     }
 
     p2.score <- p2.score - sum(p2.handScoresVal)
