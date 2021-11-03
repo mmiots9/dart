@@ -82,41 +82,51 @@
           handScoresCh  <- object@dartsScoresCh[i:(i+2)]
 
           # converto
-            handScoresVal <- chr2val(handScoresCh)
+          handScoresVal <- chr2val(handScoresCh)
 
           # valuto se in chiusura e missed doubles
-            scorePar <- scoreOv
+          scorePar <- scoreOv
+          bust <- F
 
-            for (j in seq_along(handScoresVal)){
-              if(scorePar %in% doubles & (scorePar - handScoresVal[j]) !=0 ) {
-                nMiss <- nMiss + 1
-                missedDoubles <- c(missedDoubles, paste("d", scorePar/2, sep = ""))
-              }
+          for (j in seq_along(handScoresVal)){
+
+            if (scorePar %in% doubles & (scorePar - handScoresVal[j]) !=0 ) {
+              nMiss <- nMiss + 1
+              missedDoubles <- c(missedDoubles, paste("d", scorePar/2, sep = ""))
               scorePar <- scorePar -  handScoresVal[j]
-            }
+            } else if ((scorePar %in% doubles & (scorePar - handScoresVal[j]) ==0 ) &
+                       !(handScoresCh)[j] %in% c(paste0("d", c(1:20)), "d25")) {
+              nMiss <- nMiss + 1
+              bust <- T
+              missedDoubles <- c(missedDoubles, paste("d", scorePar/2, sep = ""))
+              break
+            } else {scorePar <- scorePar -  handScoresVal[j]}
+          }
+
 
           # valuto se bust
-            if (scoreOv -  sum(handScoresVal) != 1 & (scoreOv -  sum(handScoresVal)) >= 0){
+          if (((scoreOv -  sum(handScoresVal) != 1 &
+                (scoreOv -  sum(handScoresVal)) >= 0)) & !bust) {
 
-              if (sum(handScoresVal) == 180){
-                plus180 <- plus180 + 1
-              } else if (sum(handScoresVal) >= 140){
-                plus140 <- plus140 + 1
-              } else if (sum(handScoresVal) >= 100){
-                plus100 <- plus100 + 1
-              } else if (sum(handScoresVal) >= 60){
-                plus60 <- plus60 + 1
-              }
-            } else {
-              nBust <- nBust + 1
-              handScoresVal <- c(0, 0, 0)
+            if (sum(handScoresVal) == 180){
+              plus180 <- plus180 + 1
+            } else if (sum(handScoresVal) >= 140){
+              plus140 <- plus140 + 1
+            } else if (sum(handScoresVal) >= 100){
+              plus100 <- plus100 + 1
+            } else if (sum(handScoresVal) >= 60){
+              plus60 <- plus60 + 1
             }
+          } else {
+            nBust <- nBust + 1
+            handScoresVal <- c(0, 0, 0)
+          }
 
           # sottraggo e aggiungo dartscoresval
-            scoreOv <- scoreOv - sum(handScoresVal)
-            dartsScoresVal <- c(dartsScoresVal, handScoresVal)
+          scoreOv <- scoreOv - sum(handScoresVal)
+          dartsScoresVal <- c(dartsScoresVal, handScoresVal)
 
-            }
+        }
 
 
       # tengo i valori ch buoni
@@ -275,7 +285,7 @@
       # print out
       cat("Player:", getPlayers(object), "\n")
       if (object@win == 1) {
-        cat("Winner: yes", "\n", "\n")
+        cat("Winner: yes", "\nClosing double:", object@dartsScoresCh[stats$dartsNum], "\n", "\n")
       } else {
         cat("Winner: no", "\n", "\n")
       }
