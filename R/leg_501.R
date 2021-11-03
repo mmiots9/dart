@@ -206,7 +206,7 @@ leg_501 <- function(player1, player2, df.print, nset, nleg) {
     p2leg = p2.leg
   )
 
+  cat(paste("Congratulations ", getWinner(legres), "!", sep = ""), "You've won the leg", "\n")
  Sys.sleep(0.5)
-
  return(legres)
 }

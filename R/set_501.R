@@ -26,8 +26,8 @@ set_501 <- function(player1, player2, legs2win = 1, nset, df.print){
   while ((p1.legs != legs2win) & (p2.legs != legs2win)) {
 
     # leg
-    cat(paste("Leg", nleg), "Game on!", "\n", "\n")
-    Sys.sleep(2)
+    cat(paste("Leg", nleg), ": Game on!", "\n", "\n", sep = "")
+    Sys.sleep(1)
 
     # change leg values in df print
     df.print$LEGS[df.print$player == player1] <- p1.legs

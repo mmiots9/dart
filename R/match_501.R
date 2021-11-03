@@ -35,7 +35,7 @@ match_501 <- function(player1, player2, sets2win = 1, legs2win = 1){
                          scores = c(501, 501))
 
   # show instructions in first leg
-    dlg_form(form = list("Press Enter to start"=""), message = "To record the scores, for each hand insert the value for the thrown darts separated by a comma (,) in the following form:
+    dlg_form(form = list("Press Enter to start"=""), message = "To record the scores, for each visit insert the value for the thrown darts separated by a comma (,) in the following form:
                                           #: for singles
                                           d#: for doubles
                                           t#: for trebles \nFor example: t20, 19, d25",
@@ -45,7 +45,7 @@ match_501 <- function(player1, player2, sets2win = 1, legs2win = 1){
   while ((p1.sets != sets2win) & (p2.sets != sets2win)) {
 
     # set intro
-    cat(paste("Set", nset), "Game on!", "\n")
+    cat(paste("Set", nset), ": Game on!", "\n", sep = "")
 
     # change set values in df print
     df.print$SETS[df.print$player == player1] <- p1.sets
@@ -100,7 +100,7 @@ match_501 <- function(player1, player2, sets2win = 1, legs2win = 1){
     set2win = sets2win)
 
 
-  cat(paste("Congratulations ", getWinner(matres), "!", sep = ""), "You've won the match", "\n")
+  cat(paste("Congratulations ", getWinner(matres), "!", sep = ""), "You've won the match", "\n\n")
   Sys.sleep(0.5)
   return(matres)
 
