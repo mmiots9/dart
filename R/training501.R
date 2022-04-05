@@ -104,7 +104,7 @@ training501 <- function(player, save = T, file = NA){
   )
 
   if (save) {
-    firstline <- paste(id, player)
+    firstline <- paste(id, player, sep = ",")
     secondline <- paste(p1.dartsScoresCh, collapse = ",")
     tot <- rbind(firstline, secondline)
 
