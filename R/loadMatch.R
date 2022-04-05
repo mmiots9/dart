@@ -9,7 +9,11 @@
 loadMatch <- function(file = NULL){
 
   # check filename
-  if (is.null(file)) {file <- file.choose()}
+  if (is.null(file)) {
+    cat("Select match file", "\n")
+    Sys.sleep(0.5)
+    file <- file.choose()
+    }
 
   # load file
   matchFile <- read.table(file, col.names = F)
