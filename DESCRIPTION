@@ -1,7 +1,7 @@
 Package: mdarts
 Type: Package
 Title: Darts
-Version: 0.1.0
+Version: 1.2
 Authors@R: person("Matteo", "Miotto", email = "matteo.miotto9@gmail.com",
   role = c("aut", "cre"))
 Description: This package contains several functions for dart scores handling and summary
@@ -23,4 +23,4 @@ Imports:
   readr,
   huxtable,
   knitr
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
