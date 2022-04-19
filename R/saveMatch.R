@@ -27,9 +27,8 @@ saveMatch <- function(data, file){
                                 data@p1match@sets[[s]]@legs[[l]]@win,
                                 sep = ",")
             secondLine <- paste(data@p1match@sets[[s]]@legs[[l]]@dartsScoresCh, collapse = ",")
-            thirdLine  <- ""
 
-            datatxt <- rbind(datatxt, firstLine, secondLine, thirdLine)
+            datatxt <- rbind(datatxt, firstLine, secondLine)
 
 
           }
@@ -49,9 +48,8 @@ saveMatch <- function(data, file){
                             data@p2match@sets[[s]]@legs[[l]]@win,
                             sep = ",")
         secondLine <- paste(data@p2match@sets[[s]]@legs[[l]]@dartsScoresCh, collapse = ",")
-        thirdLine  <- ""
 
-        datatxt <- rbind(datatxt, firstLine, secondLine, thirdLine)
+        datatxt <- rbind(datatxt, firstLine, secondLine)
 
 
       }
